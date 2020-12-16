@@ -1,0 +1,469 @@
+{
+	"info": {
+		"_postman_id": "532bba35-2342-428a-a2c1-3280c540ae5d",
+		"name": "demo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "student",
+			"item": [
+				{
+					"name": "学生可以查询本人每学年各学科成绩/student/listSubjectGradeByYears",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/student/listSubjectGradeByYears?stuIdMp=2&years=2020",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"student",
+								"listSubjectGradeByYears"
+							],
+							"query": [
+								{
+									"key": "stuIdMp",
+									"value": "2"
+								},
+								{
+									"key": "years",
+									"value": "2020"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "查询一个学生信息 student/readStudent?stuId=1",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/student/readStudent?stuId=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"student",
+								"readStudent"
+							],
+							"query": [
+								{
+									"key": "stuId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "保存或更新一个学生信息student/saveOrUpdateStudent?stuName=hhh&stuNum=003",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/student/saveOrUpdateStudent?stuName=hhh&stuNum=003",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"student",
+								"saveOrUpdateStudent"
+							],
+							"query": [
+								{
+									"key": "stuId",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "stuName",
+									"value": "hhh"
+								},
+								{
+									"key": "stuNum",
+									"value": "003"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "删除一个学生信息student/deleteStudent?stuId=1",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/student/deleteStudent?stuId=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"student",
+								"deleteStudent"
+							],
+							"query": [
+								{
+									"key": "stuId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "查询所有的学生,并分页student/listStudent?page=0&size=5",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/student/listStudent?page=0&size=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"student",
+								"listStudent"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "teacher",
+			"item": [
+				{
+					"name": "查询教师本人每学年，学科平均成绩，最高分，最低分teacher/listTeacherGradeByYears?teaIdMp=2&years=2020",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/teacher/listTeacherGradeByYears?teaIdMp=2&years=2020",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"teacher",
+								"listTeacherGradeByYears"
+							],
+							"query": [
+								{
+									"key": "teaIdMp",
+									"value": "2"
+								},
+								{
+									"key": "years",
+									"value": "2020"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "查询所有的教师,并分页teacher/listTeacher?page=0&size=5",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/teacher/listTeacher?page=0&size=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"teacher",
+								"listTeacher"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "查询一个教师信息teacher/readTeacher?teaId=1",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/teacher/readTeacher?teaId=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"teacher",
+								"readTeacher"
+							],
+							"query": [
+								{
+									"key": "teaId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "保存或更新一个教师信息teacher/saveOrUpdateTeacher?teaName=外语&teaNum=005",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/teacher/saveOrUpdateTeacher?teaName=外语1&teaNum=007",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"teacher",
+								"saveOrUpdateTeacher"
+							],
+							"query": [
+								{
+									"key": "teaId",
+									"value": "8",
+									"disabled": true
+								},
+								{
+									"key": "teaName",
+									"value": "外语1"
+								},
+								{
+									"key": "teaNum",
+									"value": "007"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "删除一个教师信息teacher/deleteTeacher?teaId=9",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/teacher/deleteTeacher?teaId=9",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"teacher",
+								"deleteTeacher"
+							],
+							"query": [
+								{
+									"key": "teaId",
+									"value": "9"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "discipline",
+			"item": [
+				{
+					"name": "查询每学年学科平均成绩，最高分，最低分discipline/readDisciplineGradeByYears?disIdMp=2&years=2020",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/discipline/readDisciplineGradeByYears?disIdMp=2&years=2020",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"discipline",
+								"readDisciplineGradeByYears"
+							],
+							"query": [
+								{
+									"key": "disIdMp",
+									"value": "2"
+								},
+								{
+									"key": "years",
+									"value": "2020"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "查询所有的学科,并分页discipline/listDiscipline?page=0&size=5",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/discipline/listDiscipline?page=0&size=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"discipline",
+								"listDiscipline"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "discipline/read查询一个学科信息Discipline?disId=1",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/discipline/readDiscipline?disId=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"discipline",
+								"readDiscipline"
+							],
+							"query": [
+								{
+									"key": "disId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "保存或更新一个学科信息discipline/saveOrUpdateDiscipline?disName=外语&disNum=006",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/discipline/saveOrUpdateDiscipline?disName=外语2&disNum=006",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"discipline",
+								"saveOrUpdateDiscipline"
+							],
+							"query": [
+								{
+									"key": "disId",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "disName",
+									"value": "外语2"
+								},
+								{
+									"key": "disNum",
+									"value": "006"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "删除一个学科信息discipline/deleteDiscipline?disId=5",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/discipline/deleteDiscipline?disId=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"discipline",
+								"deleteDiscipline"
+							],
+							"query": [
+								{
+									"key": "disId",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
