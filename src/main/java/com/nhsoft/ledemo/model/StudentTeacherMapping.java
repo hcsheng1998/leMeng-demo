@@ -1,6 +1,6 @@
 package com.nhsoft.ledemo.model;
 
-import com.nhsoft.ledemo.model.upk.StudentTeacherMpUid;
+import com.nhsoft.ledemo.model.uid.StudentTeacherMpUid;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;

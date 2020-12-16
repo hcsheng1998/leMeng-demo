@@ -1,4 +1,4 @@
-package com.nhsoft.ledemo.dto.Uid;
+package com.nhsoft.ledemo.dto.uid;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

@@ -2,7 +2,7 @@ package com.nhsoft.ledemo.dao.outdao;
 
 import com.nhsoft.ledemo.dao.basedao.BaseTeacherDisciplineMappingDao;
 import com.nhsoft.ledemo.model.TeacherDisciplineMapping;
-import com.nhsoft.ledemo.model.upk.TeacherDisciplineMpUid;
+import com.nhsoft.ledemo.model.uid.TeacherDisciplineMpUid;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

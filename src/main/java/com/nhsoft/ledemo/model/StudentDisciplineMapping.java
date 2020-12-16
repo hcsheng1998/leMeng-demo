@@ -1,6 +1,6 @@
 package com.nhsoft.ledemo.model;
 
-import com.nhsoft.ledemo.model.upk.StudentDisciplineMpUid;
+import com.nhsoft.ledemo.model.uid.StudentDisciplineMpUid;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

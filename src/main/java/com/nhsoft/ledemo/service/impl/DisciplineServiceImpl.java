@@ -4,7 +4,7 @@ import com.nhsoft.ledemo.dao.outdao.DisciplineDao;
 import com.nhsoft.ledemo.dao.outdao.StudentDisciplineDao;
 import com.nhsoft.ledemo.dto.DisciplineDTO;
 import com.nhsoft.ledemo.dto.TeacherGradeDTO;
-import com.nhsoft.ledemo.dto.Uid.StudentDisciplineMpUidDTO;
+import com.nhsoft.ledemo.dto.uid.StudentDisciplineMpUidDTO;
 import com.nhsoft.ledemo.model.Discipline;
 import com.nhsoft.ledemo.service.DisciplineService;
 import com.nhsoft.ledemo.util.RedisKeyConstant;

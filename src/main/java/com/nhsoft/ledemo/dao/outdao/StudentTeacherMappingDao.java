@@ -1,7 +1,7 @@
 package com.nhsoft.ledemo.dao.outdao;
 
 import com.nhsoft.ledemo.model.StudentTeacherMapping;
-import com.nhsoft.ledemo.model.upk.StudentTeacherMpUid;
+import com.nhsoft.ledemo.model.uid.StudentTeacherMpUid;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

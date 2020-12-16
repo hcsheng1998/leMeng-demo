@@ -2,7 +2,7 @@ package com.nhsoft.ledemo.service;
 
 import com.nhsoft.ledemo.dto.TeacherDTO;
 import com.nhsoft.ledemo.dto.TeacherGradeDTO;
-import com.nhsoft.ledemo.dto.Uid.TeacherDisciplineMpUidDTO;
+import com.nhsoft.ledemo.dto.uid.TeacherDisciplineMpUidDTO;
 import com.nhsoft.ledemo.model.Teacher;
 import org.springframework.data.domain.Page;
 

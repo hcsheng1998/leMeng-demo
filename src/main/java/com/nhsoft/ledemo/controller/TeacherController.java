@@ -3,7 +3,7 @@ package com.nhsoft.ledemo.controller;
 import com.nhsoft.ledemo.dto.ResponseMessageDTO;
 import com.nhsoft.ledemo.dto.TeacherDTO;
 import com.nhsoft.ledemo.dto.TeacherGradeDTO;
-import com.nhsoft.ledemo.dto.Uid.TeacherDisciplineMpUidDTO;
+import com.nhsoft.ledemo.dto.uid.TeacherDisciplineMpUidDTO;
 import com.nhsoft.ledemo.model.Teacher;
 import com.nhsoft.ledemo.service.TeacherService;
 import com.nhsoft.ledemo.util.ResponseUtil;

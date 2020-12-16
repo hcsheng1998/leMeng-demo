@@ -1,4 +1,4 @@
-package com.nhsoft.ledemo.model.upk;
+package com.nhsoft.ledemo.model.uid;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

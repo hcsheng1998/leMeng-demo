@@ -1,6 +1,6 @@
 package com.nhsoft.ledemo.dto;
 
-import com.nhsoft.ledemo.dto.Uid.StudentDisciplineMpUidDTO;
+import com.nhsoft.ledemo.dto.uid.StudentDisciplineMpUidDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
