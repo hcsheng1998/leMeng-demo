@@ -1,35 +1,30 @@
 package com.nhsoft.ledemo.service.impl;
 
-import com.nhsoft.ledemo.dao.outdao.StudentDao;
-import com.nhsoft.ledemo.dao.outdao.StudentDisciplineDao;
-import com.nhsoft.ledemo.dto.DisciplineGradeDTO;
+import com.nhsoft.ledemo.dao.StudentDao;
 import com.nhsoft.ledemo.dto.StudentDTO;
-import com.nhsoft.ledemo.dto.uid.StudentDisciplineMpUidDTO;
 import com.nhsoft.ledemo.model.Student;
 import com.nhsoft.ledemo.service.StudentService;
 import com.nhsoft.ledemo.util.RedisKeyConstant;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author heChangSheng
  * @date 2020/12/10 : 14:54
  */
 @Service
+@Transactional
 public class StudentServiceImpl implements StudentService {
 
     @Resource
     private StudentDao studentDao;
-
-    @Resource
-    private StudentDisciplineDao sdRepo;
 
     @Resource
     private RedisTemplate redisTemplate;
@@ -39,68 +34,58 @@ public class StudentServiceImpl implements StudentService {
 
 
     @Override
-    public boolean saveOrUpdate(Student student) {
-        try {
-            //判断是更改操作还是保存操作
-            //保存操作需要判断编号是否唯一
-            if (student.getStuId() == null) {
-                //判断学生编号是否存在
-                if (set.isMember(RedisKeyConstant.STUDENT_SET, student.getStuNum())) {
+    public List<StudentDTO> batchSaveOrUpdate(List<StudentDTO> students) {
 
-                    return false;
-                }
-            }
-
-            Student save = studentDao.save(student);
-
-            //判断插入成功后将学生编号存入redis中
-            if (save != null) {
-
-                set.add(RedisKeyConstant.STUDENT_SET, student.getStuNum());
-                return true;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (CollectionUtils.isEmpty(students)) {
+            return null;
         }
-        return false;
 
-    }
+        //利用redis进行学号重复过滤
+        List<StudentDTO> toUpdateStudents = students.stream()
+                .filter(student -> set.isMember(RedisKeyConstant.STUDENT_SET, student.getStuNum()))
+                .collect(Collectors.toList());
 
-    @Override
-    public boolean delete(StudentDTO student) {
+        List<StudentDTO> toSaveStudents = students.stream()
+                .filter(student -> !set.isMember(RedisKeyConstant.STUDENT_SET, student.getStuNum()))
+                .collect(Collectors.toList());
 
-        boolean b = true;
-        try {
-            studentDao.deleteById(student.getStuId());
-        } catch (Exception e) {
-            b = false;
-        } finally{
-            return b;
+        List<StudentDTO> list = null;
+
+        if (toSaveStudents != null) {
+            list = (List<StudentDTO>) studentDao.batchSave(toSaveStudents);
         }
+
+        if (toUpdateStudents != null) {
+            list = (List<StudentDTO>) studentDao.batchUpdate(toUpdateStudents);
+        }
+
+        return list;
+    }
+
+
+    @Override
+    public List<Long> batchDelete(List<Long> stuIds) {
+
+        if (stuIds == null) {
+            return null;
+        }
+
+        return (List<Long>) studentDao.batchDelete(stuIds);
     }
 
     @Override
-    public Student read(StudentDTO student) {
+    public Student readById(Long stuId) {
 
-        Specification<Student> stuId = (Specification<Student>) (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("stuId"), student.getStuId());
-        return studentDao.findOne(stuId).get();
+        return studentDao.readById(stuId);
     }
 
     @Override
-    public Page list(StudentDTO student) {
+    public List<Student> listAll(StudentDTO student) {
 
+        if (student == null) {
+            return null;
+        }
 
-        PageRequest re = PageRequest.of(student.getPage(), student.getSize());
-
-        return studentDao.findAll(re);
-
-    }
-
-    @Override
-    public List<DisciplineGradeDTO> listDisciplineGradeDTO(StudentDisciplineMpUidDTO sd){
-
-        List<DisciplineGradeDTO> disciplineGradeDTOS = sdRepo.listDisciplineGradeDTO(sd.getStuIdMp(),
-                sd.getYears());
-        return disciplineGradeDTOS;
+        return studentDao.listAll(student);
     }
 }

@@ -14,6 +14,8 @@ import java.io.Serializable;
 @Data
 public class StudentDTO extends PagingDTO implements Serializable {
 
+    private static final long serialVersionUID = -892961838308900105L;
+
     @ApiModelProperty("学生id,主键")
     private Long stuId;
 

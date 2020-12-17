@@ -17,7 +17,6 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 public class RedisConfiguration {
 
-
     @Bean
     public RedisTemplate<String,Object> redisTemplate(LettuceConnectionFactory factory){
         RedisTemplate<String,Object> template = new RedisTemplate <>();
@@ -31,7 +30,6 @@ public class RedisConfiguration {
 
         StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
 
-        // 在使用注解@Bean返回RedisTemplate的时候，同时配置hashKey与hashValue的序列化方式。
         // key采用String的序列化方式
         template.setKeySerializer(stringRedisSerializer);
         // value序列化方式采用jackson

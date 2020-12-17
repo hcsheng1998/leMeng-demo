@@ -10,7 +10,6 @@ public class ResponseUtil {
 
     /**
      * 数据错误返回信息
-     *
      * @return
      */
     public static ResponseMessageDTO dataFalse() {
@@ -21,7 +20,6 @@ public class ResponseUtil {
 
     /**
      * 查询成功返回数据
-     *
      * @return
      */
     public static ResponseMessageDTO opeSuc(Object o) {
@@ -33,7 +31,6 @@ public class ResponseUtil {
 
     /**
      * 操作成功返回数据
-     *
      * @return
      */
     public static ResponseMessageDTO opeSuc() {
@@ -44,7 +41,6 @@ public class ResponseUtil {
 
     /**
      * 操作失败返回数据
-     *
      * @return
      */
     public static ResponseMessageDTO opeFail() {

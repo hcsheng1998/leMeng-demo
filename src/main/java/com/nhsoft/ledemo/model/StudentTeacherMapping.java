@@ -1,11 +1,11 @@
 package com.nhsoft.ledemo.model;
 
 import com.nhsoft.ledemo.model.uid.StudentTeacherMpUid;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 
 /**
@@ -15,10 +15,11 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "student_teacher_mapping")
-@EntityListeners(AuditingEntityListener.class)
-@Getter
-@Setter
-public class StudentTeacherMapping {
+@Data
+@EqualsAndHashCode(exclude = {"student", "teacher"})
+public class StudentTeacherMapping implements Serializable {
+
+    private static final long serialVersionUID = 2500538766050196747L;
 
     /**
      * 学生,老师联合主键封装类对象
@@ -32,12 +33,16 @@ public class StudentTeacherMapping {
     })
     private StudentTeacherMpUid studentTeacherMpUid = new StudentTeacherMpUid();
 
-    /**学生表多对一*/
+    /**
+     * 学生表多对一
+     */
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "pk_stu_id_mp", referencedColumnName = "pk_stu_id", insertable=false, updatable=false)
     private Student student;
 
-    /**老师表多对一*/
+    /**
+     * 老师表多对一
+     */
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "pk_tea_id_mp", referencedColumnName = "pk_tea_id", insertable=false, updatable=false)
     private Teacher teacher;

@@ -17,6 +17,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class DisciplineGradeDTO implements Serializable {
 
+    private static final long serialVersionUID = 2213510509303457998L;
+
     @ApiModelProperty("成绩")
     private BigDecimal grade;
 

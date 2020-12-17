@@ -1,9 +1,7 @@
 package com.nhsoft.ledemo.config;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -21,14 +19,10 @@ import java.util.Properties;
  * @date 2020/12/9 : 14:35
  */
 @Configuration
-@EnableJpaRepositories(basePackages = {"com.nhsoft.ledemo.dao"})
-@ComponentScan("com.nhsoft.ledemo")
 public class JpaConfiguration {
-
 
     /**
      * 配置jpa供应商适配器
-     *
      * @return
      */
     @Bean
@@ -46,11 +40,8 @@ public class JpaConfiguration {
     }
 
 
-    // 配置实体管理器工厂
-
     /**
      * 配置entityManagerFactory对象
-     *
      * @param dataSource
      * @param jpaVendorAdapter
      * @return
@@ -75,7 +66,6 @@ public class JpaConfiguration {
 
     /**
      * 配置jpa事务管理器
-     *
      * @param emf
      * @return
      */

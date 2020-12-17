@@ -1,10 +1,7 @@
 package com.nhsoft.ledemo.service;
 
 import com.nhsoft.ledemo.dto.TeacherDTO;
-import com.nhsoft.ledemo.dto.TeacherGradeDTO;
-import com.nhsoft.ledemo.dto.uid.TeacherDisciplineMpUidDTO;
 import com.nhsoft.ledemo.model.Teacher;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -14,43 +11,11 @@ import java.util.List;
  */
 public interface TeacherService {
 
-    /**
-     * 插入或修改一门老师
-     *
-     * @param teacher
-     * @return
-     */
-    boolean saveOrUpdate(Teacher teacher);
+    List<TeacherDTO> batchSaveOrUpdate(List<TeacherDTO> teachers);
 
-    /**
-     * 删除一门老师
-     *
-     * @param teacher
-     * @return
-     */
-    boolean delete(TeacherDTO teacher);
+    List<Long> batchDelete(List<Long> teaIds);
 
-    /**
-     * 查询一个老师
-     *
-     * @param teacher
-     * @return
-     */
-    Teacher read(TeacherDTO teacher);
+    Teacher readById(Long teaId);
 
-    /**
-     * 查询所有的老师,并分页
-     *
-     * @param teacher
-     * @return
-     */
-    Page list(TeacherDTO teacher);
-
-    /**
-     * 查询教师本人每学年，学科平均成绩，最高分，最低分
-     *
-     * @param td
-     * @return
-     */
-    List<TeacherGradeDTO> listTeacherGradeDTO(TeacherDisciplineMpUidDTO td);
+    List<Teacher> listAll(TeacherDTO teacher);
 }

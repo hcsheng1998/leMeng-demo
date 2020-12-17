@@ -1,37 +1,31 @@
 package com.nhsoft.ledemo.service.impl;
 
-import com.nhsoft.ledemo.dao.outdao.TeacherDao;
-import com.nhsoft.ledemo.dao.outdao.TeacherDisciplineMappingDao;
+import com.nhsoft.ledemo.dao.TeacherDao;
 import com.nhsoft.ledemo.dto.TeacherDTO;
-import com.nhsoft.ledemo.dto.TeacherGradeDTO;
-import com.nhsoft.ledemo.dto.uid.TeacherDisciplineMpUidDTO;
 import com.nhsoft.ledemo.model.Teacher;
 import com.nhsoft.ledemo.service.TeacherService;
 import com.nhsoft.ledemo.util.RedisKeyConstant;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import javax.persistence.criteria.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author heChangSheng
  * @date 2020/12/10 : 14:54
  */
 @Service
+@Transactional
 public class TeacherServiceImpl implements TeacherService {
 
     @Resource
     private TeacherDao teacherDao;
 
-    @Resource
-    private TeacherDisciplineMappingDao tdRepo;
     @Resource
     private RedisTemplate redisTemplate;
 
@@ -39,74 +33,63 @@ public class TeacherServiceImpl implements TeacherService {
     private SetOperations<String, String> set;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public boolean saveOrUpdate(Teacher teacher) {
+    public List<TeacherDTO> batchSaveOrUpdate(List<TeacherDTO> teachers) {
 
-        try {
-            //判断是更改操作还是保存操作
-            //保存操作需要判断编号是否唯一
-            if (teacher.getTeaId() == null) {
-
-                //保存操作判断老师编号是否存在
-                if (set.isMember(RedisKeyConstant.TEACHER_SET, teacher.getTeaNum())) {
-
-                    return false;
-                }
-            }
-
-            Teacher save = teacherDao.save(teacher);
-
-            //判断插入成功后将老师编号存入redis中
-            if (save != null) {
-
-                set.add(RedisKeyConstant.TEACHER_SET, teacher.getTeaNum());
-                return true;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (CollectionUtils.isEmpty(teachers)) {
+            return null;
         }
 
-        return false;
-    }
+        //利用redis进行num过滤
+        List<TeacherDTO> toUpdateTeachers = teachers.stream()
+                .filter(teacher -> set.isMember(RedisKeyConstant.TEACHER_SET, teacher.getTeaNum()))
+                .collect(Collectors.toList());
 
-    @Override
-    public boolean delete(TeacherDTO teacher) {
+        List<TeacherDTO> toSaveTeachers = teachers.stream()
+                .filter(teacher -> !set.isMember(RedisKeyConstant.TEACHER_SET, teacher.getTeaNum()))
+                .collect(Collectors.toList());
 
-        boolean b = true;
-        try {
-            teacherDao.deleteById(teacher.getTeaId());
-        } catch (Exception e) {
-            b = false;
-        } finally {
-            return b;
+        List<TeacherDTO> list = null;
+
+        if (toSaveTeachers != null) {
+            list = (List<TeacherDTO>) teacherDao.batchSave(toSaveTeachers);
         }
+
+        if (toUpdateTeachers != null) {
+            list = (List<TeacherDTO>) teacherDao.batchUpdate(toUpdateTeachers);
+        }
+
+        return list;
+    }
+
+
+    @Override
+    public List<Long> batchDelete(List<Long> teaIds) {
+
+        if (teaIds == null) {
+            return null;
+        }
+
+        return (List<Long>) teacherDao.batchDelete(teaIds);
     }
 
     @Override
-    public Teacher read(TeacherDTO teacher) {
+    public Teacher readById(Long teaId) {
 
-        Specification<Teacher> specification = (Specification<Teacher>) (root, criteriaQuery, criteriaBuilder) -> {
+        if (teaId == null) {
+            return null;
+        }
 
-            Path<Object> teaId = root.get("teaId");
-            return criteriaBuilder.equal(teaId, teacher.getTeaId());
-        };
-        return teacherDao.findOne(specification).get();
+        return teacherDao.readById(teaId);
     }
 
     @Override
-    public Page list(TeacherDTO teacher) {
+    public List<Teacher> listAll(TeacherDTO teacher) {
 
+        if (teacher == null) {
+            return null;
+        }
 
-        PageRequest re = PageRequest.of(teacher.getPage(), teacher.getSize());
-
-        return teacherDao.findAll(re);
-
+        return teacherDao.listAll(teacher);
     }
 
-    @Override
-    public List<TeacherGradeDTO> listTeacherGradeDTO(TeacherDisciplineMpUidDTO td) {
-
-        return tdRepo.listTeacherGradeDTO(td.getTeaIdMp(),
-                td.getYears());
-    }
 }

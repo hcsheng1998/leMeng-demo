@@ -1,12 +1,11 @@
 package com.nhsoft.ledemo.model;
 
 import com.nhsoft.ledemo.model.uid.StudentDisciplineMpUid;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 
@@ -17,15 +16,17 @@ import java.math.BigDecimal;
  */
 @Entity
 @Table(name = "student_discipline_mapping")
-@EntityListeners(AuditingEntityListener.class)
-@NoArgsConstructor
-@Getter
-@Setter
-public class StudentDisciplineMapping {
+@Data
+@EqualsAndHashCode(exclude = {"student", "discipline"})
+public class StudentDisciplineMapping implements Serializable {
 
-    /**学生,课程联合主键封装类对象*/
+    private static final long serialVersionUID = -4639557825595705571L;
+
+    /**
+     * 学生,课程联合主键封装类对象
+     */
     @EmbeddedId
-    @AttributeOverrides( {
+    @AttributeOverrides({
             @AttributeOverride(name = "disIdMp", column = @Column(name = "pk_dis_id_mp")),
             @AttributeOverride(name = "stuIdMp", column = @Column(name = "pk_stu_id_mp")),
             @AttributeOverride(name = "years", column = @Column(name = "pk_years")),
@@ -33,20 +34,28 @@ public class StudentDisciplineMapping {
     })
     private StudentDisciplineMpUid studentDisciplineMpUid = new StudentDisciplineMpUid();
 
-    /**学生表多对一*/
-    @ManyToOne(fetch = FetchType.LAZY ,cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "pk_stu_id_mp", referencedColumnName = "pk_stu_id", insertable=false, updatable=false)
+    /**
+     * 学生表多对一
+     */
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "pk_stu_id_mp", referencedColumnName = "pk_stu_id", insertable = false, updatable = false)
     private Student student;
 
-    /**老师表多对一*/
+    /**
+     * 老师表多对一
+     */
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "pk_dis_id_mp", referencedColumnName = "pk_dis_id", insertable = false, updatable = false)
     private Discipline discipline;
 
-
-    /**某学生某课程成绩*/
+    /**
+     * 某学生某课程成绩
+     */
     @Column(name = "grade")
     private BigDecimal grade;
+
+    public StudentDisciplineMapping() {
+    }
 
     public StudentDisciplineMapping(StudentDisciplineMpUid studentDisciplineMpUid) {
         this.studentDisciplineMpUid = studentDisciplineMpUid;

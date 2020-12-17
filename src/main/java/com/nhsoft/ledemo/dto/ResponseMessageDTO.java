@@ -16,6 +16,8 @@ import java.io.Serializable;
 @Accessors(chain = true)
 public class ResponseMessageDTO implements Serializable {
 
+    private static final long serialVersionUID = 4384805853552348226L;
+
     @ApiModelProperty("状态码")
     private Integer code;
 

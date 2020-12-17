@@ -1,10 +1,7 @@
 package com.nhsoft.ledemo.service;
 
-import com.nhsoft.ledemo.dto.DisciplineGradeDTO;
 import com.nhsoft.ledemo.dto.StudentDTO;
-import com.nhsoft.ledemo.dto.uid.StudentDisciplineMpUidDTO;
 import com.nhsoft.ledemo.model.Student;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -14,43 +11,11 @@ import java.util.List;
  */
 public interface StudentService {
 
-    /**
-     * 插入或修改一个学生
-     *
-     * @param student
-     * @return
-     */
-    boolean saveOrUpdate(Student student);
+    List<StudentDTO> batchSaveOrUpdate(List<StudentDTO> students);
 
-    /**
-     * 删除一个学生
-     *
-     * @param student
-     * @return
-     */
-    boolean delete(StudentDTO student);
+    List<Long> batchDelete(List<Long> stuIds);
 
-    /**
-     * 查询一个学生
-     *
-     * @param student
-     * @return
-     */
-    Student read(StudentDTO student);
+    Student readById(Long stuId);
 
-    /**
-     * 查询所有的学生,并分页
-     *
-     * @param student
-     * @return
-     */
-    Page list(StudentDTO student);
-
-    /**
-     * 根据学生id查询学生本人每学年各学科成绩
-     *
-     * @param sd
-     * @return
-     */
-    List<DisciplineGradeDTO> listDisciplineGradeDTO(StudentDisciplineMpUidDTO sd);
+    List<Student> listAll(StudentDTO student);
 }

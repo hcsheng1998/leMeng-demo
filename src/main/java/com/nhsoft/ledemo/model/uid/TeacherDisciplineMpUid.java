@@ -11,21 +11,31 @@ import java.io.Serializable;
  * @date 2020/12/9 : 21:30
  * 老师课程映射表联合主键封装表
  */
-@Accessors(chain = true)
 @Embeddable
+@Accessors(chain = true)
 @Data
 public class TeacherDisciplineMpUid implements Serializable {
 
-    /**课程主键id*/
+    private static final long serialVersionUID = -5517057517770260385L;
+
+    /**
+     * 课程主键id
+     */
     private Long disIdMp;
 
-    /**老师主键id*/
+    /**
+     * 老师主键id
+     */
     private Long teaIdMp;
 
-    /**某老师讲授某课程的年份*/
+    /**
+     * 某老师讲授某课程的年份
+     */
     private String years;
 
-    /**某老师讲授某课程的学期*/
+    /**
+     * 某老师讲授某课程的学期
+     */
     private Short semester;
 
 }

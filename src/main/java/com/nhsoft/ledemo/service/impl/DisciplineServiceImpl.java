@@ -1,35 +1,30 @@
 package com.nhsoft.ledemo.service.impl;
 
-import com.nhsoft.ledemo.dao.outdao.DisciplineDao;
-import com.nhsoft.ledemo.dao.outdao.StudentDisciplineDao;
+import com.nhsoft.ledemo.dao.DisciplineDao;
 import com.nhsoft.ledemo.dto.DisciplineDTO;
-import com.nhsoft.ledemo.dto.TeacherGradeDTO;
-import com.nhsoft.ledemo.dto.uid.StudentDisciplineMpUidDTO;
 import com.nhsoft.ledemo.model.Discipline;
 import com.nhsoft.ledemo.service.DisciplineService;
 import com.nhsoft.ledemo.util.RedisKeyConstant;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author heChangSheng
  * @date 2020/12/10 : 15:24
  */
 @Service
+@Transactional
 public class DisciplineServiceImpl implements DisciplineService {
 
     @Resource
     private DisciplineDao disciplineDao;
-
-    @Resource
-    private StudentDisciplineDao sdRepo;
 
     @Resource
     private RedisTemplate redisTemplate;
@@ -38,72 +33,62 @@ public class DisciplineServiceImpl implements DisciplineService {
     private SetOperations<String, String> set;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public boolean saveOrUpdate(Discipline discipline) {
+    public List<DisciplineDTO> batchSaveOrUpdate(List<DisciplineDTO> disciplines) {
 
-        try {
-
-            //判断是更改操作还是保存操作
-            //保存操作需要判断编号是否唯一
-            if (discipline.getDisId() == null) {
-
-                //判断学科编号是否存在
-                if (set.isMember(RedisKeyConstant.DISCIPLINE_SET, discipline.getDisNum())) {
-
-                    return false;
-                }
-            }
-
-            Discipline save = disciplineDao.save(discipline);
-
-            //判断插入成功后将学科编号存入redis中
-            if (save != null) {
-
-                set.add(RedisKeyConstant.DISCIPLINE_SET, discipline.getDisNum());
-                return true;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (CollectionUtils.isEmpty(disciplines)) {
+            return null;
         }
 
-        return false;
+        //利用redis进行学科编号过滤
+        List<DisciplineDTO> toUpdateDisciplines = disciplines.stream()
+                .filter(discipline -> set.isMember(RedisKeyConstant.DISCIPLINE_SET, discipline.getDisNum()))
+                .collect(Collectors.toList());
 
-    }
+        List<DisciplineDTO> toSaveDisciplines = disciplines.stream()
+                .filter(discipline -> !set.isMember(RedisKeyConstant.DISCIPLINE_SET, discipline.getDisNum()))
+                .collect(Collectors.toList());
 
+        List<DisciplineDTO> list = null;
 
-    @Override
-    public boolean delete(DisciplineDTO discipline) {
-
-        boolean b = true;
-        try {
-            disciplineDao.deleteById(discipline.getDisId());
-        } catch (Exception e) {
-            b = false;
-        } finally {
-            return b;
+        if (toSaveDisciplines != null) {
+            list = (List<DisciplineDTO>) disciplineDao.batchSave(toSaveDisciplines);
         }
+
+        if (toUpdateDisciplines != null) {
+            list = (List<DisciplineDTO>) disciplineDao.batchUpdate(toUpdateDisciplines);
+        }
+
+        return list;
+    }
+
+
+    @Override
+    public List<Long> batchDelete(List<Long> disIds) {
+
+        if (disIds == null) {
+            return null;
+        }
+
+        return (List<Long>) disciplineDao.batchDelete(disIds);
     }
 
     @Override
-    public Discipline read(DisciplineDTO discipline) {
+    public Discipline readById(Long disId) {
 
-        Specification<Discipline> disId = (Specification<Discipline>) (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.get("disId"), discipline.getDisId());
-        return disciplineDao.findOne(disId).get();
+        if (disId == null) {
+            return null;
+        }
+
+        return disciplineDao.readById(disId);
     }
 
     @Override
-    public Page list(DisciplineDTO discipline) {
+    public List<Discipline> listAll(DisciplineDTO discipline) {
 
+        if (discipline == null) {
+            return null;
+        }
 
-        PageRequest re = PageRequest.of(discipline.getPage(), discipline.getSize());
-
-        return disciplineDao.findAll(re);
-    }
-
-    @Override
-    public TeacherGradeDTO readTeacherGradeDTO(StudentDisciplineMpUidDTO sd) {
-
-        return sdRepo.readTeacherGradeDTO(sd.getDisIdMp(),
-                sd.getYears());
+        return disciplineDao.listAll(discipline);
     }
 }

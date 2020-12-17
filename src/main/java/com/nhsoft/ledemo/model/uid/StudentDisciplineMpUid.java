@@ -16,16 +16,26 @@ import java.io.Serializable;
 @Data
 public class StudentDisciplineMpUid implements Serializable {
 
-    /**课程主键id*/
+    private static final long serialVersionUID = 4170979492868219252L;
+
+    /**
+     * 课程主键id
+     */
     private Long disIdMp;
 
-    /**学生主键id*/
+    /**
+     * 学生主键id
+     */
     private Long stuIdMp;
 
-    /**学生学习课程年份*/
+    /**
+     * 学生学习课程年份
+     */
     private String years;
 
-    /**学生学习课程学期*/
+    /**
+     * 学生学习课程学期
+     */
     private Short semester;
 
 }

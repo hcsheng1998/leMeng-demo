@@ -14,6 +14,8 @@ import java.io.Serializable;
 @Data
 public class StudentTeacherMpUidDTO implements Serializable {
 
+    private static final long serialVersionUID = -5510541317253408449L;
+
     @ApiModelProperty("老师主键id")
     private Long teaIdMp;
 

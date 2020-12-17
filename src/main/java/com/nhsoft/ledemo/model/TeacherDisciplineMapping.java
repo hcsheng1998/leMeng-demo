@@ -1,11 +1,11 @@
 package com.nhsoft.ledemo.model;
 
 import com.nhsoft.ledemo.model.uid.TeacherDisciplineMpUid;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 
 /**
@@ -15,12 +15,15 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "teacher_discipline_mapping")
-@EntityListeners(AuditingEntityListener.class)
-@Getter
-@Setter
-public class TeacherDisciplineMapping {
+@Data
+@EqualsAndHashCode(exclude = {"teacher", "discipline"})
+public class TeacherDisciplineMapping implements Serializable {
 
-    /**老师,课程联合主键封装类对象*/
+    private static final long serialVersionUID = 4237333728479430904L;
+
+    /**
+     * 老师,课程联合主键封装类对象
+     */
     @EmbeddedId
     @AttributeOverrides({
             @AttributeOverride(name = "disIdMp",column = @Column(name = "pk_dis_id_mp")),
@@ -30,12 +33,16 @@ public class TeacherDisciplineMapping {
     })
     private TeacherDisciplineMpUid teacherDisciplineMpUid = new TeacherDisciplineMpUid();
 
-    /**老师表多对一*/
+    /**
+     * 老师表多对一
+     */
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
     @JoinColumn(name = "pk_tea_id_mp", referencedColumnName = "pk_tea_id", insertable=false, updatable=false)
     private Teacher teacher;
 
-    /**学科表多对一*/
+    /**
+     * 学科表多对一
+     */
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
     @JoinColumn(name = "pk_dis_id_mp", referencedColumnName = "pk_dis_id", insertable=false, updatable=false)
     private Discipline discipline;

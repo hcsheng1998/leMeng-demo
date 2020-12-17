@@ -6,18 +6,16 @@ import com.nhsoft.ledemo.dto.TeacherGradeDTO;
 import com.nhsoft.ledemo.dto.uid.StudentDisciplineMpUidDTO;
 import com.nhsoft.ledemo.model.Discipline;
 import com.nhsoft.ledemo.service.DisciplineService;
+import com.nhsoft.ledemo.service.StudentDisciplineMappingService;
 import com.nhsoft.ledemo.util.ResponseUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import lombok.extern.java.Log;
-import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author heChangSheng
@@ -26,11 +24,14 @@ import javax.annotation.Resource;
 @Api(tags = "学科信息模块")
 @RestController
 @RequestMapping("/discipline/")
-@Log
+@Slf4j
 public class DisciplineController {
 
     @Resource
     private DisciplineService disciplineService;
+
+    @Resource
+    private StudentDisciplineMappingService sdService;
 
     @ApiOperation("查询每学年学科平均成绩，最高分，最低分")
     @GetMapping("readDisciplineGradeByYears")
@@ -39,23 +40,12 @@ public class DisciplineController {
         log.info("接口的参数:" + sd);
         ResponseMessageDTO responseMessageDTO = null;
 
-        boolean dataFalse = sd.getYears() == null || sd.getDisIdMp() == null;
-        //检验前端数据
-        if (dataFalse) {
+        TeacherGradeDTO teacherGradeDTO = sdService.readTeacherGradeDTO(sd);
 
-            return ResponseUtil.dataFalse();
-        }
-
-        TeacherGradeDTO teacherGradeDTO = disciplineService.readTeacherGradeDTO(sd);
-
-        //查询是否成功
         if (teacherGradeDTO == null) {
-
             responseMessageDTO = ResponseUtil.opeFail();
         } else {
-
             responseMessageDTO = ResponseUtil.opeSuc(teacherGradeDTO);
-
         }
 
         log.info("接口的返回值是" + responseMessageDTO);
@@ -69,24 +59,12 @@ public class DisciplineController {
         log.info("接口的参数:" + discipline);
         ResponseMessageDTO responseMessageDTO = null;
 
-        boolean dataFalse = discipline.getSize() == 0;
+        List<Discipline> disciplines = disciplineService.listAll(discipline);
 
-        //检验前端数据
-        if (dataFalse) {
-
-            return ResponseUtil.dataFalse();
-        }
-
-        Page pageDiscipline = disciplineService.list(discipline);
-
-        //保存或更新是否成功
-        if (pageDiscipline == null) {
-
+        if (disciplines == null) {
             responseMessageDTO = ResponseUtil.opeFail();
         } else {
-
-            responseMessageDTO = ResponseUtil.opeSuc(pageDiscipline);
-
+            responseMessageDTO = ResponseUtil.opeSuc(disciplines);
         }
 
         log.info("接口的返回值是" + responseMessageDTO);
@@ -95,91 +73,55 @@ public class DisciplineController {
 
     @ApiOperation("查询一个学科信息")
     @PostMapping("readDiscipline")
-    public ResponseMessageDTO readDiscipline(@ApiParam("封装学科主键,disId") DisciplineDTO disciplinePo) {
+    public ResponseMessageDTO readDiscipline(@ApiParam("学科主键") Long disId) {
 
-        log.info("接口的参数:" + disciplinePo);
+        log.info("接口的参数:" + disId);
         ResponseMessageDTO responseMessageDTO = null;
 
-        boolean dataFalse = disciplinePo.getDisId() == null;
+        Discipline discipline = disciplineService.readById(disId);
 
-        //检验前端数据
-        if (dataFalse) {
-
-            return ResponseUtil.dataFalse();
-        }
-
-        Discipline discipline = disciplineService.read(disciplinePo);
-
-        //保存或更新是否成功
         if (discipline == null) {
-
             responseMessageDTO = ResponseUtil.opeFail();
         } else {
-
             responseMessageDTO = ResponseUtil.opeSuc(discipline);
-
         }
 
         log.info("接口的返回值是" + responseMessageDTO);
         return responseMessageDTO;
     }
 
-    @ApiOperation("保存或更新一个学科信息")
+    @ApiOperation("批量保存或更新学科信息")
     @PostMapping("saveOrUpdateDiscipline")
-    public ResponseMessageDTO saveOrUpdateDiscipline(@ApiParam("封装学科信息类,disId,disName,disNum") Discipline discipline) {
+    public ResponseMessageDTO saveOrUpdateDiscipline(@ApiParam("学科集合") @RequestParam("disciplines") List<DisciplineDTO> disciplines) {
 
-        log.info("接口的参数:" + discipline);
+        log.info("接口的参数:" + disciplines);
         ResponseMessageDTO responseMessageDTO = null;
 
-        boolean dataFalse = discipline.getDisName() == null || discipline.getDisNum() == null;
+        List<DisciplineDTO> disciplineDTOS = disciplineService.batchSaveOrUpdate(disciplines);
 
-        //检验前端数据
-        if (dataFalse) {
-
-            return ResponseUtil.dataFalse();
-        }
-
-        boolean b = disciplineService.saveOrUpdate(discipline);
-
-        //保存或更新是否成功
-        if (!b) {
-
+        if (disciplineDTOS == null) {
             responseMessageDTO = ResponseUtil.opeFail();
         } else {
-
             responseMessageDTO = ResponseUtil.opeSuc();
-
         }
 
         log.info("接口的返回值是" + responseMessageDTO);
         return responseMessageDTO;
     }
 
-    @ApiOperation("删除一个学科信息")
+    @ApiOperation("批量删除学科信息")
     @PostMapping("deleteDiscipline")
-    public ResponseMessageDTO deleteDiscipline(@ApiParam("封装学科主键,disId") DisciplineDTO discipline) {
+    public ResponseMessageDTO deleteDiscipline(@ApiParam("学科主键集合") @RequestParam("disIds") List<Long> disIds) {
 
-        log.info("接口的参数:" + discipline);
+        log.info("接口的参数:" + disIds);
         ResponseMessageDTO responseMessageDTO = null;
 
-        boolean dataFalse = discipline.getDisId() == null;
+        List<Long> ids = disciplineService.batchDelete(disIds);
 
-        //检验前端数据
-        if (dataFalse) {
-
-            return ResponseUtil.dataFalse();
-        }
-
-        boolean b = disciplineService.delete(discipline);
-
-        //删除是否成功
-        if (!b) {
-
+        if (ids == null) {
             responseMessageDTO = ResponseUtil.opeFail();
         } else {
-
             responseMessageDTO = ResponseUtil.opeSuc();
-
         }
 
         log.info("接口的返回值是" + responseMessageDTO);

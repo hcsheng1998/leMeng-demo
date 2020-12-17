@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -14,11 +13,11 @@ import java.math.BigDecimal;
  * @date 2020/12/10 : 17:34
  */
 @ApiModel("成绩和学科查询封装类")
-@ToString
 @Data
 @NoArgsConstructor
 public class TeacherGradeDTO implements Serializable {
 
+    private static final long serialVersionUID = -1323799863811452819L;
 
     @ApiModelProperty("学科名称")
     private String disName;
