@@ -13,6 +13,7 @@ public interface TeacherDisciplineMappingDao {
 
     /**
      * 查询教师本人每学年，学科平均成绩，最高分，最低分
+     * @param td
      * @return
      */
     List<TeacherGradeDTO> listTeacherGradeDTO(TeacherDisciplineMpUidDTO td);
