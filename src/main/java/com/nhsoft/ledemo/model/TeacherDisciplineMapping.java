@@ -1,8 +1,6 @@
 package com.nhsoft.ledemo.model;
 
 import com.nhsoft.ledemo.model.uid.TeacherDisciplineMpUid;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,8 +13,6 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "teacher_discipline_mapping")
-@Data
-@EqualsAndHashCode(exclude = {"teacher", "discipline"})
 public class TeacherDisciplineMapping implements Serializable {
 
     private static final long serialVersionUID = 4237333728479430904L;
@@ -46,6 +42,34 @@ public class TeacherDisciplineMapping implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
     @JoinColumn(name = "pk_dis_id_mp", referencedColumnName = "pk_dis_id", insertable=false, updatable=false)
     private Discipline discipline;
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public TeacherDisciplineMpUid getTeacherDisciplineMpUid() {
+        return teacherDisciplineMpUid;
+    }
+
+    public void setTeacherDisciplineMpUid(TeacherDisciplineMpUid teacherDisciplineMpUid) {
+        this.teacherDisciplineMpUid = teacherDisciplineMpUid;
+    }
+
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
+    }
+
+    public Discipline getDiscipline() {
+        return discipline;
+    }
+
+    public void setDiscipline(Discipline discipline) {
+        this.discipline = discipline;
+    }
 
     @Override
     public String toString() {

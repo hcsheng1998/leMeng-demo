@@ -1,6 +1,6 @@
 package com.nhsoft.ledemo.service;
 
-import com.nhsoft.ledemo.dto.StudentDTO;
+import com.nhsoft.ledemo.dto.PagingDTO;
 import com.nhsoft.ledemo.model.Student;
 
 import java.util.List;
@@ -11,11 +11,16 @@ import java.util.List;
  */
 public interface StudentService {
 
-    List<StudentDTO> batchSaveOrUpdate(List<StudentDTO> students);
+    List<Student> batchSaveOrUpdate(List<Student> studentList);
 
-    List<Long> batchDelete(List<Long> stuIds);
+    List<Long> batchDelete(List<Long> stuIdList);
 
     Student readById(Long stuId);
 
-    List<Student> listAll(StudentDTO student);
+    /**
+     * 查询所有学生并分页
+     * @param pagingDTO 自定义分页对象
+     * @return
+     */
+    List<Student> listAll(PagingDTO pagingDTO);
 }

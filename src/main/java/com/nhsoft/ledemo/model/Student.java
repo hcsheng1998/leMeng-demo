@@ -1,7 +1,6 @@
 package com.nhsoft.ledemo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,7 +14,6 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "student")
-@Data
 public class Student implements Serializable {
 
     private static final long serialVersionUID = 931304113468729139L;
@@ -54,4 +52,47 @@ public class Student implements Serializable {
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, orphanRemoval = true,cascade = CascadeType.PERSIST)
     private Set<StudentDisciplineMapping> disciplines = new HashSet<>();
 
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public Long getStuId() {
+        return stuId;
+    }
+
+    public void setStuId(Long stuId) {
+        this.stuId = stuId;
+    }
+
+    public String getStuName() {
+        return stuName;
+    }
+
+    public void setStuName(String stuName) {
+        this.stuName = stuName;
+    }
+
+    public String getStuNum() {
+        return stuNum;
+    }
+
+    public void setStuNum(String stuNum) {
+        this.stuNum = stuNum;
+    }
+
+    public Set<StudentTeacherMapping> getTeachers() {
+        return teachers;
+    }
+
+    public void setTeachers(Set<StudentTeacherMapping> teachers) {
+        this.teachers = teachers;
+    }
+
+    public Set<StudentDisciplineMapping> getDisciplines() {
+        return disciplines;
+    }
+
+    public void setDisciplines(Set<StudentDisciplineMapping> disciplines) {
+        this.disciplines = disciplines;
+    }
 }

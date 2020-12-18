@@ -2,7 +2,7 @@ package com.nhsoft.ledemo.dao.impl;
 
 import com.nhsoft.ledemo.dao.BaseDao;
 import com.nhsoft.ledemo.dao.TeacherDao;
-import com.nhsoft.ledemo.dto.TeacherDTO;
+import com.nhsoft.ledemo.dto.PagingDTO;
 import com.nhsoft.ledemo.model.Teacher;
 import org.springframework.stereotype.Repository;
 
@@ -20,32 +20,32 @@ import java.util.List;
 public class TeacherDaoImpl extends BaseDao implements TeacherDao {
 
     @Override
-    public Collection<TeacherDTO> batchSave(Collection<TeacherDTO> collection) {
-        collection.forEach(teacher -> entityManager.persist(teacher));
-        return collection;
+    public Collection<Teacher> batchSave(Collection<Teacher> teacherCollection) {
+        teacherCollection.forEach(teacher -> entityManager.persist(teacher));
+        return teacherCollection;
     }
 
     @Override
-    public Collection<TeacherDTO> batchUpdate(Collection<TeacherDTO> collection) {
-        collection.forEach(teacher -> entityManager.merge(teacher));
-        return collection;
+    public Collection<Teacher> batchUpdate(Collection<Teacher> teacherCollection) {
+        teacherCollection.forEach(teacher -> entityManager.merge(teacher));
+        return teacherCollection;
     }
 
     @Override
-    public Collection<Long> batchDelete(Collection<Long> teaIds) {
+    public Collection<Long> batchDelete(Collection<Long> teaIdCollection) {
 
         String jpql = "delete from Teacher  where teaId = ?1";
         Query query = entityManager.createQuery(jpql);
-        teaIds.forEach(id -> query.setParameter(1, id).executeUpdate());
-        return teaIds;
+        teaIdCollection.forEach(id -> query.setParameter(1, id).executeUpdate());
+        return teaIdCollection;
     }
 
     @Override
-    public List<Teacher> listAll(TeacherDTO teacher) {
+    public List<Teacher> listAll(PagingDTO pagingDTO) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Teacher> query = criteriaBuilder.createQuery(Teacher.class);
         query.from(Teacher.class);
-        return entityManager.createQuery(query).setFirstResult(teacher.getPage()).setMaxResults(teacher.getSize()).getResultList();
+        return entityManager.createQuery(query).setFirstResult(pagingDTO.getPage()).setMaxResults(pagingDTO.getSize()).getResultList();
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.nhsoft.ledemo.service.impl;
 
 import com.nhsoft.ledemo.dao.DisciplineDao;
-import com.nhsoft.ledemo.dto.DisciplineDTO;
+import com.nhsoft.ledemo.dto.PagingDTO;
 import com.nhsoft.ledemo.model.Discipline;
 import com.nhsoft.ledemo.service.DisciplineService;
 import com.nhsoft.ledemo.util.RedisKeyConstant;
@@ -33,43 +33,43 @@ public class DisciplineServiceImpl implements DisciplineService {
     private SetOperations<String, String> set;
 
     @Override
-    public List<DisciplineDTO> batchSaveOrUpdate(List<DisciplineDTO> disciplines) {
+    public List<Discipline> batchSaveOrUpdate(List<Discipline> disciplineList) {
 
-        if (CollectionUtils.isEmpty(disciplines)) {
+        if (CollectionUtils.isEmpty(disciplineList)) {
             return null;
         }
 
         //利用redis进行学科编号过滤
-        List<DisciplineDTO> toUpdateDisciplines = disciplines.stream()
+        List<Discipline> toUpdateDisciplines = disciplineList.stream()
                 .filter(discipline -> set.isMember(RedisKeyConstant.DISCIPLINE_SET, discipline.getDisNum()))
                 .collect(Collectors.toList());
 
-        List<DisciplineDTO> toSaveDisciplines = disciplines.stream()
+        List<Discipline> toSaveDisciplines = disciplineList.stream()
                 .filter(discipline -> !set.isMember(RedisKeyConstant.DISCIPLINE_SET, discipline.getDisNum()))
                 .collect(Collectors.toList());
 
-        List<DisciplineDTO> list = null;
+        disciplineList = null;
 
         if (toSaveDisciplines != null) {
-            list = (List<DisciplineDTO>) disciplineDao.batchSave(toSaveDisciplines);
+            disciplineList = (List<Discipline>) disciplineDao.batchSave(toSaveDisciplines);
         }
 
         if (toUpdateDisciplines != null) {
-            list = (List<DisciplineDTO>) disciplineDao.batchUpdate(toUpdateDisciplines);
+            disciplineList = (List<Discipline>) disciplineDao.batchUpdate(toUpdateDisciplines);
         }
 
-        return list;
+        return disciplineList;
     }
 
 
     @Override
-    public List<Long> batchDelete(List<Long> disIds) {
+    public List<Long> batchDelete(List<Long> disIdList) {
 
-        if (disIds == null) {
+        if (disIdList == null) {
             return null;
         }
 
-        return (List<Long>) disciplineDao.batchDelete(disIds);
+        return (List<Long>) disciplineDao.batchDelete(disIdList);
     }
 
     @Override
@@ -83,12 +83,12 @@ public class DisciplineServiceImpl implements DisciplineService {
     }
 
     @Override
-    public List<Discipline> listAll(DisciplineDTO discipline) {
+    public List<Discipline> listAll(PagingDTO pagingDTO) {
 
-        if (discipline == null) {
+        if (pagingDTO == null) {
             return null;
         }
 
-        return disciplineDao.listAll(discipline);
+        return disciplineDao.listAll(pagingDTO);
     }
 }

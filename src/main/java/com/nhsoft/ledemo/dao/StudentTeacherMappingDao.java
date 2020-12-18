@@ -1,6 +1,6 @@
 package com.nhsoft.ledemo.dao;
 
-import com.nhsoft.ledemo.dto.StudentTeacherMappingDTO;
+import com.nhsoft.ledemo.model.StudentTeacherMapping;
 
 import java.util.Collection;
 
@@ -10,8 +10,8 @@ import java.util.Collection;
  */
 public interface StudentTeacherMappingDao {
 
-    Collection<StudentTeacherMappingDTO> batchSave(Collection<StudentTeacherMappingDTO> collection);
+    Collection<StudentTeacherMapping> batchSave(Collection<StudentTeacherMapping> studentTeacherMappingCollection);
 
-    Collection<StudentTeacherMappingDTO> batchUpdate(Collection<StudentTeacherMappingDTO> collection);
+    Collection<StudentTeacherMapping> batchUpdate(Collection<StudentTeacherMapping> studentTeacherMappingCollection);
 
 }

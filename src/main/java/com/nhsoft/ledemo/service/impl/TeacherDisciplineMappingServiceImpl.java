@@ -1,9 +1,11 @@
 package com.nhsoft.ledemo.service.impl;
 
 import com.nhsoft.ledemo.dao.TeacherDisciplineMappingDao;
-import com.nhsoft.ledemo.dto.TeacherGradeDTO;
-import com.nhsoft.ledemo.dto.uid.TeacherDisciplineMpUidDTO;
+import com.nhsoft.ledemo.dto.DisciplineGradeDTO;
+import com.nhsoft.ledemo.model.uid.TeacherDisciplineMpUid;
 import com.nhsoft.ledemo.service.TeacherDisciplineMappingService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -12,18 +14,20 @@ import java.util.List;
  * @author heChangSheng
  * @date 2020/12/17 : 22:42
  */
+@Service
+@Transactional
 public class TeacherDisciplineMappingServiceImpl  implements TeacherDisciplineMappingService {
 
     @Resource
-    private TeacherDisciplineMappingDao tdRepo;
+    private TeacherDisciplineMappingDao teacherDisciplineMappingDao;
 
     @Override
-    public List<TeacherGradeDTO> listTeacherGradeDTO(TeacherDisciplineMpUidDTO td) {
+    public List<DisciplineGradeDTO> listDisciplineGrade(TeacherDisciplineMpUid teacherDisciplineMpUid) {
 
-        if (td == null) {
+        if (teacherDisciplineMpUid == null) {
             return null;
         }
 
-        return tdRepo.listTeacherGradeDTO(td);
+        return teacherDisciplineMappingDao.listDisciplineGrade(teacherDisciplineMpUid);
     }
 }

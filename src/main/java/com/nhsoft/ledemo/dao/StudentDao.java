@@ -1,6 +1,6 @@
 package com.nhsoft.ledemo.dao;
 
-import com.nhsoft.ledemo.dto.StudentDTO;
+import com.nhsoft.ledemo.dto.PagingDTO;
 import com.nhsoft.ledemo.model.Student;
 
 import java.util.Collection;
@@ -12,13 +12,18 @@ import java.util.List;
  */
 public interface StudentDao {
 
-    Collection<StudentDTO> batchSave(Collection<StudentDTO> collection);
+    Collection<Student> batchSave(Collection<Student> studentCollection);
 
-    Collection<StudentDTO> batchUpdate(Collection<StudentDTO> collection);
+    Collection<Student> batchUpdate(Collection<Student> studentCollection);
 
-    Collection<Long> batchDelete(Collection<Long> stuIds);
+    Collection<Long> batchDelete(Collection<Long> stuIdCollection);
 
-    List<Student> listAll(StudentDTO student);
+    /**
+     * 查询所有学生并分页
+     * @param pagingDTO 自定义分页对象
+     * @return
+     */
+    List<Student> listAll(PagingDTO pagingDTO);
 
     Student readById(Long stuId);
 }

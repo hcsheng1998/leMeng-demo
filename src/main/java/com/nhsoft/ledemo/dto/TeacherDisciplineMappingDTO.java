@@ -3,7 +3,6 @@ package com.nhsoft.ledemo.dto;
 import com.nhsoft.ledemo.dto.uid.TeacherDisciplineMpUidDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
 
 import java.io.Serializable;
 
@@ -13,7 +12,6 @@ import java.io.Serializable;
  * @date 2020/12/9 : 20:16
  */
 @ApiModel("老师课程映射表实体类")
-@Data
 public class TeacherDisciplineMappingDTO implements Serializable {
 
     private static final long serialVersionUID = 5967761442169086198L;
@@ -27,4 +25,40 @@ public class TeacherDisciplineMappingDTO implements Serializable {
     @ApiModelProperty("学生类")
     private DisciplineDTO discipline;
 
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public TeacherDisciplineMpUidDTO getTeacherDisciplineMpUid() {
+        return teacherDisciplineMpUid;
+    }
+
+    public void setTeacherDisciplineMpUid(TeacherDisciplineMpUidDTO teacherDisciplineMpUid) {
+        this.teacherDisciplineMpUid = teacherDisciplineMpUid;
+    }
+
+    public TeacherDTO getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(TeacherDTO teacher) {
+        this.teacher = teacher;
+    }
+
+    public DisciplineDTO getDiscipline() {
+        return discipline;
+    }
+
+    public void setDiscipline(DisciplineDTO discipline) {
+        this.discipline = discipline;
+    }
+
+    @Override
+    public String toString() {
+        return "TeacherDisciplineMappingDTO{" +
+                "teacherDisciplineMpUid=" + teacherDisciplineMpUid +
+                ", teacher=" + teacher +
+                ", discipline=" + discipline +
+                '}';
+    }
 }

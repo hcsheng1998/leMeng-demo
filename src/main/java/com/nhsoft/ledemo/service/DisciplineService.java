@@ -1,6 +1,6 @@
 package com.nhsoft.ledemo.service;
 
-import com.nhsoft.ledemo.dto.DisciplineDTO;
+import com.nhsoft.ledemo.dto.PagingDTO;
 import com.nhsoft.ledemo.model.Discipline;
 
 import java.util.List;
@@ -11,11 +11,16 @@ import java.util.List;
  */
 public interface DisciplineService {
 
-    List<DisciplineDTO> batchSaveOrUpdate(List<DisciplineDTO> disciplines);
+    List<Discipline> batchSaveOrUpdate(List<Discipline> disciplineList);
 
-    List<Long> batchDelete(List<Long> disIds);
+    List<Long> batchDelete(List<Long> disIdList);
 
     Discipline readById(Long disId);
 
-    List<Discipline> listAll(DisciplineDTO discipline);
+    /**
+     * 查询所有学科并分页
+     * @param pagingDTO 自定义分页对象
+     * @return
+     */
+    List<Discipline> listAll(PagingDTO pagingDTO);
 }

@@ -14,8 +14,7 @@ public class ResponseUtil {
      */
     public static ResponseMessageDTO dataFalse() {
 
-        return new ResponseMessageDTO().setCode(StatusCodeEnum.DATAEXCEPTION.getCode()).
-                setMessage(StatusCodeEnum.DATAEXCEPTION.getMessage());
+        return new ResponseMessageDTO(StatusCodeEnum.DATAEXCEPTION.getCode(),StatusCodeEnum.DATAEXCEPTION.getMessage());
     }
 
     /**
@@ -24,9 +23,7 @@ public class ResponseUtil {
      */
     public static ResponseMessageDTO opeSuc(Object o) {
 
-        return new ResponseMessageDTO().setCode(StatusCodeEnum.SUCCESS.getCode())
-                .setMessage(StatusCodeEnum.SUCCESS.getMessage())
-                .setData(o);
+        return new ResponseMessageDTO(StatusCodeEnum.SUCCESS.getCode(), StatusCodeEnum.SUCCESS.getMessage(), o);
     }
 
     /**
@@ -35,8 +32,7 @@ public class ResponseUtil {
      */
     public static ResponseMessageDTO opeSuc() {
 
-        return new ResponseMessageDTO().setCode(StatusCodeEnum.SUCCESS.getCode())
-                .setMessage(StatusCodeEnum.SUCCESS.getMessage());
+        return new ResponseMessageDTO(StatusCodeEnum.SUCCESS.getCode(), StatusCodeEnum.SUCCESS.getMessage());
     }
 
     /**
@@ -45,7 +41,6 @@ public class ResponseUtil {
      */
     public static ResponseMessageDTO opeFail() {
 
-        return new ResponseMessageDTO().setCode(StatusCodeEnum.FAIL.getCode()).
-                setMessage(StatusCodeEnum.FAIL.getMessage());
+        return new ResponseMessageDTO(StatusCodeEnum.FAIL.getCode(), StatusCodeEnum.FAIL.getMessage());
     }
 }

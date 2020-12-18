@@ -3,10 +3,8 @@ package com.nhsoft.ledemo.dao.impl;
 import com.nhsoft.ledemo.dao.BaseDao;
 import com.nhsoft.ledemo.dao.StudentDisciplineMappingDao;
 import com.nhsoft.ledemo.dto.DisciplineGradeDTO;
-import com.nhsoft.ledemo.dto.StudentDisciplineMappingDTO;
-import com.nhsoft.ledemo.dto.TeacherGradeDTO;
-import com.nhsoft.ledemo.dto.uid.StudentDisciplineMpUidDTO;
 import com.nhsoft.ledemo.model.StudentDisciplineMapping;
+import com.nhsoft.ledemo.model.uid.StudentDisciplineMpUid;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.*;
@@ -21,10 +19,10 @@ import java.util.List;
 public class StudentDisciplineMappingDaoImpl extends BaseDao implements StudentDisciplineMappingDao {
 
     @Override
-    public List<DisciplineGradeDTO> listDisciplineGradeDTO(StudentDisciplineMpUidDTO sd) {
+    public List<DisciplineGradeDTO> listDisciplineGrade(StudentDisciplineMpUid studentDisciplineMpUid) {
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<DisciplineGradeDTO> query = cb.createQuery(DisciplineGradeDTO.class);
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<DisciplineGradeDTO> query = criteriaBuilder.createQuery(DisciplineGradeDTO.class);
 
         Root<StudentDisciplineMapping> sdmFrom = query.from(StudentDisciplineMapping.class);
         Join<Object, Object> dJoin = sdmFrom.join("discipline", JoinType.LEFT);
@@ -34,32 +32,32 @@ public class StudentDisciplineMappingDaoImpl extends BaseDao implements StudentD
                 dJoin.get("disName")
         );
 
-        Predicate stuIdMp = cb.equal(sdmFrom.get("studentDisciplineMpUid").get("stuIdMp"), sd.getStuIdMp());
-        Predicate yearsMp = cb.equal(sdmFrom.get("studentDisciplineMpUid").get("years"), sd.getYears());
+        Predicate stuIdMp = criteriaBuilder.equal(sdmFrom.get("studentDisciplineMpUid").get("stuIdMp"), studentDisciplineMpUid.getStuIdMp());
+        Predicate yearsMp = criteriaBuilder.equal(sdmFrom.get("studentDisciplineMpUid").get("years"), studentDisciplineMpUid.getYears());
 
-        query.where(cb.and(stuIdMp, yearsMp));
+        query.where(criteriaBuilder.and(stuIdMp, yearsMp));
 
         return entityManager.createQuery(query).getResultList();
     }
 
     @Override
-    public TeacherGradeDTO readTeacherGradeDTO(StudentDisciplineMpUidDTO sd) {
+    public DisciplineGradeDTO readDisciplineGrade(StudentDisciplineMpUid studentDisciplineMpUid) {
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<TeacherGradeDTO> query = cb.createQuery(TeacherGradeDTO.class);
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<DisciplineGradeDTO> query = criteriaBuilder.createQuery(DisciplineGradeDTO.class);
 
         Root<StudentDisciplineMapping> sdmFrom = query.from(StudentDisciplineMapping.class);
         Join<Object, Object> dJoin = sdmFrom.join("discipline");
 
         query.multiselect(
                 dJoin.get("disName"),
-                cb.avg(sdmFrom.get("grade")),
-                cb.max(sdmFrom.get("grade")),
-                cb.min(sdmFrom.get("grade"))
+                criteriaBuilder.avg(sdmFrom.get("grade")),
+                criteriaBuilder.max(sdmFrom.get("grade")),
+                criteriaBuilder.min(sdmFrom.get("grade"))
         );
 
-        Predicate disIdMp = cb.equal(sdmFrom.get("studentDisciplineMpUid").get("disIdMp"), sd.getDisIdMp());
-        Predicate yearsMp = cb.equal(sdmFrom.get("studentDisciplineMpUid").get("years"), sd.getYears());
+        Predicate disIdMp = criteriaBuilder.equal(sdmFrom.get("studentDisciplineMpUid").get("disIdMp"), studentDisciplineMpUid.getDisIdMp());
+        Predicate yearsMp = criteriaBuilder.equal(sdmFrom.get("studentDisciplineMpUid").get("years"), studentDisciplineMpUid.getYears());
 
         query.where(disIdMp, yearsMp);
 
@@ -67,15 +65,15 @@ public class StudentDisciplineMappingDaoImpl extends BaseDao implements StudentD
     }
 
     @Override
-    public Collection<StudentDisciplineMappingDTO> batchSave(Collection<StudentDisciplineMappingDTO> collection) {
-        collection.forEach(studentDisciplineMapping -> entityManager.persist(studentDisciplineMapping));
-        return collection;
+    public Collection<StudentDisciplineMapping> batchSave(Collection<StudentDisciplineMapping> studentDisciplineMappingCollection) {
+        studentDisciplineMappingCollection.forEach(studentDisciplineMapping -> entityManager.persist(studentDisciplineMapping));
+        return studentDisciplineMappingCollection;
     }
 
     @Override
-    public Collection<StudentDisciplineMappingDTO> batchUpdate(Collection<StudentDisciplineMappingDTO> collection) {
-        collection.forEach(studentDisciplineMapping -> entityManager.merge(studentDisciplineMapping));
-        return collection;
+    public Collection<StudentDisciplineMapping> batchUpdate(Collection<StudentDisciplineMapping> studentDisciplineMappingCollection) {
+        studentDisciplineMappingCollection.forEach(studentDisciplineMapping -> entityManager.merge(studentDisciplineMapping));
+        return studentDisciplineMappingCollection;
     }
 
 

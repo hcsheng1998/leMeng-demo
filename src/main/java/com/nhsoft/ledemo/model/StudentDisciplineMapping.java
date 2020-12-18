@@ -1,8 +1,6 @@
 package com.nhsoft.ledemo.model;
 
 import com.nhsoft.ledemo.model.uid.StudentDisciplineMpUid;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,8 +14,6 @@ import java.math.BigDecimal;
  */
 @Entity
 @Table(name = "student_discipline_mapping")
-@Data
-@EqualsAndHashCode(exclude = {"student", "discipline"})
 public class StudentDisciplineMapping implements Serializable {
 
     private static final long serialVersionUID = -4639557825595705571L;
@@ -59,6 +55,42 @@ public class StudentDisciplineMapping implements Serializable {
 
     public StudentDisciplineMapping(StudentDisciplineMpUid studentDisciplineMpUid) {
         this.studentDisciplineMpUid = studentDisciplineMpUid;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public StudentDisciplineMpUid getStudentDisciplineMpUid() {
+        return studentDisciplineMpUid;
+    }
+
+    public void setStudentDisciplineMpUid(StudentDisciplineMpUid studentDisciplineMpUid) {
+        this.studentDisciplineMpUid = studentDisciplineMpUid;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public Discipline getDiscipline() {
+        return discipline;
+    }
+
+    public void setDiscipline(Discipline discipline) {
+        this.discipline = discipline;
+    }
+
+    public BigDecimal getGrade() {
+        return grade;
+    }
+
+    public void setGrade(BigDecimal grade) {
+        this.grade = grade;
     }
 
     @Override

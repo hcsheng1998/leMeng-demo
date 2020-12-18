@@ -2,7 +2,7 @@ package com.nhsoft.ledemo.dao.impl;
 
 import com.nhsoft.ledemo.dao.BaseDao;
 import com.nhsoft.ledemo.dao.StudentDao;
-import com.nhsoft.ledemo.dto.StudentDTO;
+import com.nhsoft.ledemo.dto.PagingDTO;
 import com.nhsoft.ledemo.model.Student;
 import org.springframework.stereotype.Repository;
 
@@ -20,32 +20,32 @@ import java.util.List;
 public class StudentDaoImpl extends BaseDao implements StudentDao {
 
     @Override
-    public Collection<StudentDTO> batchSave(Collection<StudentDTO> collection) {
-        collection.forEach(student -> entityManager.persist(student));
-        return collection;
+    public Collection<Student> batchSave(Collection<Student> studentCollection) {
+        studentCollection.forEach(student -> entityManager.persist(student));
+        return studentCollection;
     }
 
     @Override
-    public Collection<StudentDTO> batchUpdate(Collection<StudentDTO> collection) {
-        collection.forEach(student -> entityManager.merge(student));
-        return collection;
+    public Collection<Student> batchUpdate(Collection<Student> studentCollection) {
+        studentCollection.forEach(student -> entityManager.merge(student));
+        return studentCollection;
     }
 
     @Override
-    public Collection<Long> batchDelete(Collection<Long> stuIds) {
+    public Collection<Long> batchDelete(Collection<Long> stuIdCollection) {
 
         String jpql = "delete from Student  where stuId = ?1";
         Query query = entityManager.createQuery(jpql);
-        stuIds.forEach(id -> query.setParameter(1, id).executeUpdate());
-        return stuIds;
+        stuIdCollection.forEach(id -> query.setParameter(1, id).executeUpdate());
+        return stuIdCollection;
     }
 
     @Override
-    public List<Student> listAll(StudentDTO student) {
+    public List<Student> listAll(PagingDTO pagingDTO) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Student> query = criteriaBuilder.createQuery(Student.class);
         query.from(Student.class);
-        return entityManager.createQuery(query).setFirstResult(student.getPage()).setMaxResults(student.getSize()).getResultList();
+        return entityManager.createQuery(query).setFirstResult(pagingDTO.getPage()).setMaxResults(pagingDTO.getSize()).getResultList();
     }
 
     @Override

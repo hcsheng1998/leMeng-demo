@@ -1,6 +1,6 @@
 package com.nhsoft.ledemo.dao;
 
-import com.nhsoft.ledemo.dto.DisciplineDTO;
+import com.nhsoft.ledemo.dto.PagingDTO;
 import com.nhsoft.ledemo.model.Discipline;
 
 import java.util.Collection;
@@ -12,13 +12,18 @@ import java.util.List;
  */
 public interface DisciplineDao {
 
-    Collection<DisciplineDTO> batchSave(Collection<DisciplineDTO> collection);
+    Collection<Discipline> batchSave(Collection<Discipline> disciplineCollection);
 
-    Collection<DisciplineDTO> batchUpdate(Collection<DisciplineDTO> collection);
+    Collection<Discipline> batchUpdate(Collection<Discipline> disciplineCollection);
 
-    Collection<Long> batchDelete(Collection<Long> disIds);
+    Collection<Long> batchDelete(Collection<Long> disIdCollection);
 
-    List<Discipline> listAll(DisciplineDTO discipline);
+    /**
+     * 查询所有学科并分页
+     * @param pagingDTO 自定义分页对象
+     * @return
+     */
+    List<Discipline> listAll(PagingDTO pagingDTO);
 
     Discipline readById(Long disId);
 }

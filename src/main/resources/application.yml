@@ -24,6 +24,18 @@ spring:
         max-wait: 1000 # 连接池最大阻塞等待时间
       shutdown-timeout: 100  # 关闭超时时间
 
-hibernate:
-  naming:
-    physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+  jpa:
+    database: MySQL
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 200
+          batch_versioned_data: true
+        order_inserts: true
+        order_updates: true
+        naming:
+          physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy

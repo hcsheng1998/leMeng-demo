@@ -1,8 +1,5 @@
 package com.nhsoft.ledemo.model.uid;
 
-import lombok.Data;
-import lombok.experimental.Accessors;
-
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 
@@ -12,8 +9,6 @@ import java.io.Serializable;
  * 学生老师映射表联合主键封装表
  */
 @Embeddable
-@Accessors(chain = true)
-@Data
 public class StudentTeacherMpUid implements Serializable {
 
     private static final long serialVersionUID = -8731852262793616836L;
@@ -38,4 +33,49 @@ public class StudentTeacherMpUid implements Serializable {
      */
     private Short semester;
 
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public Long getTeaIdMp() {
+        return teaIdMp;
+    }
+
+    public void setTeaIdMp(Long teaIdMp) {
+        this.teaIdMp = teaIdMp;
+    }
+
+    public Long getStuIdMp() {
+        return stuIdMp;
+    }
+
+    public void setStuIdMp(Long stuIdMp) {
+        this.stuIdMp = stuIdMp;
+    }
+
+    public String getYears() {
+        return years;
+    }
+
+    public void setYears(String years) {
+        this.years = years;
+    }
+
+    public Short getSemester() {
+        return semester;
+    }
+
+    public void setSemester(Short semester) {
+        this.semester = semester;
+    }
+
+    @Override
+    public String toString() {
+        return "StudentTeacherMpUid{" +
+                "teaIdMp=" + teaIdMp +
+                ", stuIdMp=" + stuIdMp +
+                ", years='" + years + '\'' +
+                ", semester=" + semester +
+                '}';
+    }
 }

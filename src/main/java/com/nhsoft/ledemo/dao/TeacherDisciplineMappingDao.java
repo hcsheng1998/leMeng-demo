@@ -1,7 +1,9 @@
 package com.nhsoft.ledemo.dao;
-import com.nhsoft.ledemo.dto.TeacherDisciplineMappingDTO;
-import com.nhsoft.ledemo.dto.TeacherGradeDTO;
-import com.nhsoft.ledemo.dto.uid.TeacherDisciplineMpUidDTO;
+
+import com.nhsoft.ledemo.dto.DisciplineGradeDTO;
+import com.nhsoft.ledemo.model.TeacherDisciplineMapping;
+import com.nhsoft.ledemo.model.uid.TeacherDisciplineMpUid;
+
 import java.util.Collection;
 import java.util.List;
 
@@ -13,12 +15,12 @@ public interface TeacherDisciplineMappingDao {
 
     /**
      * 查询教师本人每学年，学科平均成绩，最高分，最低分
-     * @param td
-     * @return
+     * @param teacherDisciplineMpUid
+     * @return 自定义学科成绩类
      */
-    List<TeacherGradeDTO> listTeacherGradeDTO(TeacherDisciplineMpUidDTO td);
+    List<DisciplineGradeDTO> listDisciplineGrade(TeacherDisciplineMpUid teacherDisciplineMpUid);
 
-    Collection<TeacherDisciplineMappingDTO> batchSave(Collection<TeacherDisciplineMappingDTO> collection);
+    Collection<TeacherDisciplineMapping> batchSave(Collection<TeacherDisciplineMapping> teacherDisciplineMappingCollection);
 
-    Collection<TeacherDisciplineMappingDTO> batchUpdate(Collection<TeacherDisciplineMappingDTO> collection);
+    Collection<TeacherDisciplineMapping> batchUpdate(Collection<TeacherDisciplineMapping> teacherDisciplineMappingCollection);
 }

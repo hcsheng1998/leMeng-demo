@@ -1,7 +1,7 @@
 package com.nhsoft.ledemo.service.impl;
 
 import com.nhsoft.ledemo.dao.StudentDao;
-import com.nhsoft.ledemo.dto.StudentDTO;
+import com.nhsoft.ledemo.dto.PagingDTO;
 import com.nhsoft.ledemo.model.Student;
 import com.nhsoft.ledemo.service.StudentService;
 import com.nhsoft.ledemo.util.RedisKeyConstant;
@@ -34,43 +34,43 @@ public class StudentServiceImpl implements StudentService {
 
 
     @Override
-    public List<StudentDTO> batchSaveOrUpdate(List<StudentDTO> students) {
+    public List<Student> batchSaveOrUpdate(List<Student> studentList) {
 
-        if (CollectionUtils.isEmpty(students)) {
+        if (CollectionUtils.isEmpty(studentList)) {
             return null;
         }
 
         //利用redis进行学号重复过滤
-        List<StudentDTO> toUpdateStudents = students.stream()
+        List<Student> toUpdateStudents = studentList.stream()
                 .filter(student -> set.isMember(RedisKeyConstant.STUDENT_SET, student.getStuNum()))
                 .collect(Collectors.toList());
 
-        List<StudentDTO> toSaveStudents = students.stream()
+        List<Student> toSaveStudents = studentList.stream()
                 .filter(student -> !set.isMember(RedisKeyConstant.STUDENT_SET, student.getStuNum()))
                 .collect(Collectors.toList());
 
-        List<StudentDTO> list = null;
+        studentList = null;
 
         if (toSaveStudents != null) {
-            list = (List<StudentDTO>) studentDao.batchSave(toSaveStudents);
+            studentList = (List<Student>) studentDao.batchSave(toSaveStudents);
         }
 
         if (toUpdateStudents != null) {
-            list = (List<StudentDTO>) studentDao.batchUpdate(toUpdateStudents);
+            studentList = (List<Student>) studentDao.batchUpdate(toUpdateStudents);
         }
 
-        return list;
+        return studentList;
     }
 
 
     @Override
-    public List<Long> batchDelete(List<Long> stuIds) {
+    public List<Long> batchDelete(List<Long> stuIdList) {
 
-        if (stuIds == null) {
+        if (stuIdList == null) {
             return null;
         }
 
-        return (List<Long>) studentDao.batchDelete(stuIds);
+        return (List<Long>) studentDao.batchDelete(stuIdList);
     }
 
     @Override
@@ -80,12 +80,12 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<Student> listAll(StudentDTO student) {
+    public List<Student> listAll(PagingDTO pagingDTO) {
 
-        if (student == null) {
+        if (pagingDTO == null) {
             return null;
         }
 
-        return studentDao.listAll(student);
+        return studentDao.listAll(pagingDTO);
     }
 }

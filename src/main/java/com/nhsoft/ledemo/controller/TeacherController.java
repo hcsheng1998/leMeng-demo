@@ -1,17 +1,21 @@
 package com.nhsoft.ledemo.controller;
 
+import com.nhsoft.ledemo.dto.PagingDTO;
 import com.nhsoft.ledemo.dto.ResponseMessageDTO;
 import com.nhsoft.ledemo.dto.TeacherDTO;
-import com.nhsoft.ledemo.dto.TeacherGradeDTO;
+import com.nhsoft.ledemo.dto.DisciplineGradeDTO;
 import com.nhsoft.ledemo.dto.uid.TeacherDisciplineMpUidDTO;
 import com.nhsoft.ledemo.model.Teacher;
+import com.nhsoft.ledemo.model.uid.TeacherDisciplineMpUid;
 import com.nhsoft.ledemo.service.TeacherDisciplineMappingService;
 import com.nhsoft.ledemo.service.TeacherService;
+import com.nhsoft.ledemo.util.CopyUtil;
 import com.nhsoft.ledemo.util.ResponseUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -24,28 +28,29 @@ import java.util.List;
 @Api(tags = "教师信息模块")
 @RestController
 @RequestMapping("/teacher/")
-@Slf4j
 public class TeacherController {
+
+    private static final Logger log = LoggerFactory.getLogger(com.nhsoft.ledemo.controller.TeacherController.class);
 
     @Resource
     private TeacherService teacherService;
 
     @Resource
-    private TeacherDisciplineMappingService tdService;
+    private TeacherDisciplineMappingService teacherDisciplineMappingService;
 
     @ApiOperation("查询教师本人每学年，学科平均成绩，最高分，最低分")
     @GetMapping("listTeacherGradeByYears")
-    public ResponseMessageDTO listTeacherGradeByYears(@ApiParam("封装参数:years和teaIdMp") TeacherDisciplineMpUidDTO sd) {
+    public ResponseMessageDTO listTeacherGradeByYears(@ApiParam("封装参数:years和teaIdMp") TeacherDisciplineMpUidDTO teacherDisciplineMpUidDTO) {
 
-        log.info("接口的参数:" + sd);
+        log.info("接口的参数:" + teacherDisciplineMpUidDTO);
         ResponseMessageDTO responseMessageDTO = null;
 
-        List<TeacherGradeDTO> teacherGradeDTOS = tdService.listTeacherGradeDTO(sd);
+        List<DisciplineGradeDTO> disciplineGradeDTOList = teacherDisciplineMappingService.listDisciplineGrade(CopyUtil.to(teacherDisciplineMpUidDTO, TeacherDisciplineMpUid.class));
 
-        if (teacherGradeDTOS == null) {
+        if (disciplineGradeDTOList == null) {
             responseMessageDTO = ResponseUtil.opeFail();
         } else {
-            responseMessageDTO = ResponseUtil.opeSuc(teacherGradeDTOS);
+            responseMessageDTO = ResponseUtil.opeSuc(disciplineGradeDTOList);
         }
 
         log.info("接口的返回值是" + responseMessageDTO);
@@ -54,17 +59,17 @@ public class TeacherController {
 
     @ApiOperation("查询所有的教师,并分页")
     @PostMapping("listTeacher")
-    public ResponseMessageDTO listTeacher(@ApiParam("封装教师分页信息,page,size") TeacherDTO teacher) {
+    public ResponseMessageDTO listTeacher(@ApiParam("分页信息,page,size") PagingDTO pagingDTO) {
 
-        log.info("接口的参数:" + teacher);
+        log.info("接口的参数:" + pagingDTO);
         ResponseMessageDTO responseMessageDTO = null;
 
-        List<Teacher> teachers = teacherService.listAll(teacher);
+        List<Teacher> teacherList = teacherService.listAll(pagingDTO);
 
-        if (teachers == null) {
+        if (teacherList == null) {
             responseMessageDTO = ResponseUtil.opeFail();
         } else {
-            responseMessageDTO = ResponseUtil.opeSuc(teachers);
+            responseMessageDTO = ResponseUtil.opeSuc(CopyUtil.toList(teacherList, TeacherDTO.class));
 
         }
 
@@ -84,7 +89,7 @@ public class TeacherController {
         if (teacher == null) {
             responseMessageDTO = ResponseUtil.opeFail();
         } else {
-            responseMessageDTO = ResponseUtil.opeSuc(teacher);
+            responseMessageDTO = ResponseUtil.opeSuc(CopyUtil.to(teacher, TeacherDTO.class));
         }
 
         log.info("接口的返回值是" + responseMessageDTO);
@@ -93,14 +98,14 @@ public class TeacherController {
 
     @ApiOperation("批量保存或更新教师信息")
     @PostMapping("saveOrUpdateTeacher")
-    public ResponseMessageDTO saveOrUpdateTeacher(@ApiParam("教师信息集合") @RequestParam("teachers") List<TeacherDTO> teachers) {
+    public ResponseMessageDTO saveOrUpdateTeacher(@ApiParam("教师信息集合") @RequestParam("teacherDTOList") List<TeacherDTO> teacherDTOList) {
 
-        log.info("接口的参数:" + teachers);
+        log.info("接口的参数:" + teacherDTOList);
         ResponseMessageDTO responseMessageDTO = null;
 
-        List<TeacherDTO> teacherDTOS = teacherService.batchSaveOrUpdate(teachers);
+        List<Teacher> teacherList = teacherService.batchSaveOrUpdate(CopyUtil.toList(teacherDTOList, Teacher.class));
 
-        if (teacherDTOS == null) {
+        if (teacherList == null) {
             responseMessageDTO = ResponseUtil.opeFail();
         } else {
             responseMessageDTO = ResponseUtil.opeSuc();
@@ -112,14 +117,14 @@ public class TeacherController {
 
     @ApiOperation("批量删除教师信息")
     @PostMapping("deleteTeacher")
-    public ResponseMessageDTO deleteTeacher(@ApiParam("教师主键") @RequestParam("teaIds") List<Long> teaIds) {
+    public ResponseMessageDTO deleteTeacher(@ApiParam("教师主键") @RequestParam("teaIdList") List<Long> teaIdList) {
 
-        log.info("接口的参数:" + teaIds);
+        log.info("接口的参数:" + teaIdList);
         ResponseMessageDTO responseMessageDTO = null;
 
-        List<Long> ids = teacherService.batchDelete(teaIds);
+        teaIdList = teacherService.batchDelete(teaIdList);
 
-        if (ids == null) {
+        if (teaIdList == null) {
             responseMessageDTO = ResponseUtil.opeFail();
         } else {
             responseMessageDTO = ResponseUtil.opeSuc();

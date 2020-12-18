@@ -1,7 +1,7 @@
 package com.nhsoft.ledemo.service.impl;
 
 import com.nhsoft.ledemo.dao.TeacherDao;
-import com.nhsoft.ledemo.dto.TeacherDTO;
+import com.nhsoft.ledemo.dto.PagingDTO;
 import com.nhsoft.ledemo.model.Teacher;
 import com.nhsoft.ledemo.service.TeacherService;
 import com.nhsoft.ledemo.util.RedisKeyConstant;
@@ -33,43 +33,43 @@ public class TeacherServiceImpl implements TeacherService {
     private SetOperations<String, String> set;
 
     @Override
-    public List<TeacherDTO> batchSaveOrUpdate(List<TeacherDTO> teachers) {
+    public List<Teacher> batchSaveOrUpdate(List<Teacher> teacherList) {
 
-        if (CollectionUtils.isEmpty(teachers)) {
+        if (CollectionUtils.isEmpty(teacherList)) {
             return null;
         }
 
         //利用redis进行num过滤
-        List<TeacherDTO> toUpdateTeachers = teachers.stream()
+        List<Teacher> toUpdateTeachers = teacherList.stream()
                 .filter(teacher -> set.isMember(RedisKeyConstant.TEACHER_SET, teacher.getTeaNum()))
                 .collect(Collectors.toList());
 
-        List<TeacherDTO> toSaveTeachers = teachers.stream()
+        List<Teacher> toSaveTeachers = teacherList.stream()
                 .filter(teacher -> !set.isMember(RedisKeyConstant.TEACHER_SET, teacher.getTeaNum()))
                 .collect(Collectors.toList());
 
-        List<TeacherDTO> list = null;
+        teacherList = null;
 
         if (toSaveTeachers != null) {
-            list = (List<TeacherDTO>) teacherDao.batchSave(toSaveTeachers);
+            teacherList = (List<Teacher>) teacherDao.batchSave(toSaveTeachers);
         }
 
         if (toUpdateTeachers != null) {
-            list = (List<TeacherDTO>) teacherDao.batchUpdate(toUpdateTeachers);
+            teacherList = (List<Teacher>) teacherDao.batchUpdate(toUpdateTeachers);
         }
 
-        return list;
+        return teacherList;
     }
 
 
     @Override
-    public List<Long> batchDelete(List<Long> teaIds) {
+    public List<Long> batchDelete(List<Long> teaIdList) {
 
-        if (teaIds == null) {
+        if (teaIdList == null) {
             return null;
         }
 
-        return (List<Long>) teacherDao.batchDelete(teaIds);
+        return (List<Long>) teacherDao.batchDelete(teaIdList);
     }
 
     @Override
@@ -83,13 +83,13 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public List<Teacher> listAll(TeacherDTO teacher) {
+    public List<Teacher> listAll(PagingDTO pagingDTO) {
 
-        if (teacher == null) {
+        if (pagingDTO == null) {
             return null;
         }
 
-        return teacherDao.listAll(teacher);
+        return teacherDao.listAll(pagingDTO);
     }
 
 }
