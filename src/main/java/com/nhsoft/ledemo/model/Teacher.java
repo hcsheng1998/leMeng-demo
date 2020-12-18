@@ -11,7 +11,6 @@ import java.util.Set;
  * 老师表实体类
  */
 @Entity
-@Table(name = "teacher")
 public class Teacher implements Serializable {
 
     private static final long serialVersionUID = -1644368688235923990L;
