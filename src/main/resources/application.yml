@@ -38,4 +38,4 @@ spring:
         order_inserts: true
         order_updates: true
         naming:
-          physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+          physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl

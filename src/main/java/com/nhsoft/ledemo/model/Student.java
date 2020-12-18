@@ -1,7 +1,5 @@
 package com.nhsoft.ledemo.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -13,7 +11,6 @@ import java.util.Set;
  * 学生表实体类
  */
 @Entity
-@Table(name = "student")
 public class Student implements Serializable {
 
     private static final long serialVersionUID = 931304113468729139L;
@@ -29,26 +26,22 @@ public class Student implements Serializable {
     /**
      * 学生姓名
      */
-    @Column(name = "stu_name")
     private String stuName;
 
     /**
      * 学生学号,唯一索引
      */
-    @Column(name = "stu_num")
     private String stuNum;
 
     /**
      * 老师学生映射表一对多
      */
-    @JsonIgnore
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, orphanRemoval = true,cascade = CascadeType.PERSIST)
     private Set<StudentTeacherMapping> teachers = new HashSet<>();
 
     /**
      * 课程学生映射表一对多
      */
-    @JsonIgnore
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, orphanRemoval = true,cascade = CascadeType.PERSIST)
     private Set<StudentDisciplineMapping> disciplines = new HashSet<>();
 

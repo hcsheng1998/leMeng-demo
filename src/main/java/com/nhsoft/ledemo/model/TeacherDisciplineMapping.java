@@ -12,7 +12,6 @@ import java.io.Serializable;
  * 老师课程映射表实体类
  */
 @Entity
-@Table(name = "teacher_discipline_mapping")
 public class TeacherDisciplineMapping implements Serializable {
 
     private static final long serialVersionUID = 4237333728479430904L;
@@ -73,8 +72,10 @@ public class TeacherDisciplineMapping implements Serializable {
 
     @Override
     public String toString() {
-        return "TeacherDisciplineMappingPo{" +
-                "teacherDisciplineMpUpk=" + teacherDisciplineMpUid +
+        return "TeacherDisciplineMapping{" +
+                "teacherDisciplineMpUid=" + teacherDisciplineMpUid +
+                ", teacher=" + teacher +
+                ", discipline=" + discipline +
                 '}';
     }
 }

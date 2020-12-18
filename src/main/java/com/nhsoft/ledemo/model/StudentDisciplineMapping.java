@@ -13,7 +13,6 @@ import java.math.BigDecimal;
  * 学生学科映射表实体类
  */
 @Entity
-@Table(name = "student_discipline_mapping")
 public class StudentDisciplineMapping implements Serializable {
 
     private static final long serialVersionUID = -4639557825595705571L;
@@ -47,7 +46,6 @@ public class StudentDisciplineMapping implements Serializable {
     /**
      * 某学生某课程成绩
      */
-    @Column(name = "grade")
     private BigDecimal grade;
 
     public StudentDisciplineMapping() {
@@ -95,8 +93,10 @@ public class StudentDisciplineMapping implements Serializable {
 
     @Override
     public String toString() {
-        return "StudentDisciplineMappingPo{" +
-                "studentDisciplineMpUpk=" + studentDisciplineMpUid +
+        return "StudentDisciplineMapping{" +
+                "studentDisciplineMpUid=" + studentDisciplineMpUid +
+                ", student=" + student +
+                ", discipline=" + discipline +
                 ", grade=" + grade +
                 '}';
     }
