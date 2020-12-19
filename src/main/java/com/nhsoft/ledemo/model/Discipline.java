@@ -89,4 +89,15 @@ public class Discipline implements Serializable {
     public void setTeachers(Set<TeacherDisciplineMapping> teachers) {
         this.teachers = teachers;
     }
+
+    @Override
+    public String toString() {
+        return "Discipline{" +
+                "disId=" + disId +
+                ", disName='" + disName + '\'' +
+                ", disNum='" + disNum + '\'' +
+                ", students=" + students +
+                ", teachers=" + teachers +
+                '}';
+    }
 }

@@ -88,4 +88,15 @@ public class Student implements Serializable {
     public void setDisciplines(Set<StudentDisciplineMapping> disciplines) {
         this.disciplines = disciplines;
     }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "stuId=" + stuId +
+                ", stuName='" + stuName + '\'' +
+                ", stuNum='" + stuNum + '\'' +
+                ", teachers=" + teachers +
+                ", disciplines=" + disciplines +
+                '}';
+    }
 }
