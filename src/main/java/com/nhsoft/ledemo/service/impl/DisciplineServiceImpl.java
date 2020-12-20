@@ -40,22 +40,25 @@ public class DisciplineServiceImpl implements DisciplineService {
         }
 
         //利用redis进行学科编号过滤
-        List<Discipline> toUpdateDisciplines = disciplineList.stream()
+        List<Discipline> toUpdateDisciplineList = disciplineList.stream()
                 .filter(discipline -> set.isMember(RedisKeyConstant.DISCIPLINE_SET, discipline.getDisNum()))
                 .collect(Collectors.toList());
 
-        List<Discipline> toSaveDisciplines = disciplineList.stream()
+        List<Discipline> toSaveDisciplineList = disciplineList.stream()
                 .filter(discipline -> !set.isMember(RedisKeyConstant.DISCIPLINE_SET, discipline.getDisNum()))
                 .collect(Collectors.toList());
 
         disciplineList = null;
 
-        if (toSaveDisciplines != null) {
-            disciplineList = (List<Discipline>) disciplineDao.batchSave(toSaveDisciplines);
+        if (toSaveDisciplineList.size() != 0) {
+            disciplineList = (List<Discipline>) disciplineDao.batchSave(toSaveDisciplineList);
+
+            //保存成功,学科编号放入redis的set中
+            disciplineList.forEach(discipline -> set.add(RedisKeyConstant.DISCIPLINE_SET, discipline.getDisNum()));
         }
 
-        if (toUpdateDisciplines != null) {
-            disciplineList = (List<Discipline>) disciplineDao.batchUpdate(toUpdateDisciplines);
+        if (toUpdateDisciplineList.size() != 0) {
+            disciplineList = (List<Discipline>) disciplineDao.batchUpdate(toUpdateDisciplineList);
         }
 
         return disciplineList;
@@ -69,7 +72,15 @@ public class DisciplineServiceImpl implements DisciplineService {
             return null;
         }
 
-        return (List<Long>) disciplineDao.batchDelete(disIdList);
+        //删除成功,从redis中删除学科编号
+        disIdList.forEach(disId -> {
+            Discipline discipline = disciplineDao.readById(disId);
+            set.remove(RedisKeyConstant.DISCIPLINE_SET, discipline.getDisNum());
+        });
+
+        disIdList = (List<Long>) disciplineDao.batchDelete(disIdList);
+
+        return disIdList;
     }
 
     @Override

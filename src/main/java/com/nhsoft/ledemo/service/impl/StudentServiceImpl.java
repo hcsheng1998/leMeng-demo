@@ -41,22 +41,24 @@ public class StudentServiceImpl implements StudentService {
         }
 
         //利用redis进行学号重复过滤
-        List<Student> toUpdateStudents = studentList.stream()
+        List<Student> toUpdateStudentList = studentList.stream()
                 .filter(student -> set.isMember(RedisKeyConstant.STUDENT_SET, student.getStuNum()))
                 .collect(Collectors.toList());
 
-        List<Student> toSaveStudents = studentList.stream()
+        List<Student> toSaveStudentList = studentList.stream()
                 .filter(student -> !set.isMember(RedisKeyConstant.STUDENT_SET, student.getStuNum()))
                 .collect(Collectors.toList());
 
         studentList = null;
 
-        if (toSaveStudents != null) {
-            studentList = (List<Student>) studentDao.batchSave(toSaveStudents);
+        if (toUpdateStudentList.size() != 0) {
+            studentList = (List<Student>) studentDao.batchSave(toUpdateStudentList);
         }
 
-        if (toUpdateStudents != null) {
-            studentList = (List<Student>) studentDao.batchUpdate(toUpdateStudents);
+        if (toSaveStudentList.size() != 0) {
+            studentList = (List<Student>) studentDao.batchUpdate(toSaveStudentList);
+            //保存成功,学生学号放入redis的set中
+            studentList.forEach(student -> set.add(RedisKeyConstant.STUDENT_SET, student.getStuNum()));
         }
 
         return studentList;
@@ -70,7 +72,15 @@ public class StudentServiceImpl implements StudentService {
             return null;
         }
 
-        return (List<Long>) studentDao.batchDelete(stuIdList);
+        //删除成功,从redis中删除学号
+        stuIdList.forEach(stuId -> {
+            Student student = studentDao.readById(stuId);
+            set.remove(RedisKeyConstant.STUDENT_SET, student.getStuNum());
+        });
+
+        stuIdList = (List<Long>) studentDao.batchDelete(stuIdList);
+
+        return stuIdList;
     }
 
     @Override

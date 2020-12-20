@@ -40,22 +40,25 @@ public class TeacherServiceImpl implements TeacherService {
         }
 
         //利用redis进行num过滤
-        List<Teacher> toUpdateTeachers = teacherList.stream()
+        List<Teacher> toUpdateTeacherList = teacherList.stream()
                 .filter(teacher -> set.isMember(RedisKeyConstant.TEACHER_SET, teacher.getTeaNum()))
                 .collect(Collectors.toList());
 
-        List<Teacher> toSaveTeachers = teacherList.stream()
+        List<Teacher> toSaveTeacherList = teacherList.stream()
                 .filter(teacher -> !set.isMember(RedisKeyConstant.TEACHER_SET, teacher.getTeaNum()))
                 .collect(Collectors.toList());
 
         teacherList = null;
 
-        if (toSaveTeachers != null) {
-            teacherList = (List<Teacher>) teacherDao.batchSave(toSaveTeachers);
+        if (toSaveTeacherList.size() != 0) {
+            teacherList = (List<Teacher>) teacherDao.batchSave(toSaveTeacherList);
+
+            //保存成功,老师编号放入redis的set中
+            teacherList.forEach(teacher -> set.add(RedisKeyConstant.TEACHER_SET, teacher.getTeaNum()));
         }
 
-        if (toUpdateTeachers != null) {
-            teacherList = (List<Teacher>) teacherDao.batchUpdate(toUpdateTeachers);
+        if (toUpdateTeacherList.size() != 0) {
+            teacherList = (List<Teacher>) teacherDao.batchUpdate(toUpdateTeacherList);
         }
 
         return teacherList;
@@ -69,7 +72,15 @@ public class TeacherServiceImpl implements TeacherService {
             return null;
         }
 
-        return (List<Long>) teacherDao.batchDelete(teaIdList);
+        //删除成功,从redis中删除老师编号
+        teaIdList.forEach(teaId -> {
+            Teacher teacher = teacherDao.readById(teaId);
+            set.remove(RedisKeyConstant.TEACHER_SET, teacher.getTeaNum());
+        });
+
+        teaIdList = (List<Long>) teacherDao.batchDelete(teaIdList);
+
+        return teaIdList;
     }
 
     @Override
