@@ -1,16 +1,18 @@
 package com.nhsoft.ledemo.model;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author heChangSheng
- * @date 2020/12/9 : 23:36
  * 学科表实体类
+ * @author hcsheng1998
  */
 @Entity
+@Data
 public class Discipline implements Serializable {
 
     private static final long serialVersionUID = -3576772963583430665L;
@@ -36,68 +38,13 @@ public class Discipline implements Serializable {
     /**
      * 学生学科映射表一对多
      */
-    @OneToMany(mappedBy = "discipline", orphanRemoval = true, fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "discipline", fetch = FetchType.LAZY)
     private Set<StudentDisciplineMapping> students = new HashSet<>();
 
     /**
      * 老师学科映射表一对多
      */
-    @OneToMany(mappedBy = "discipline", orphanRemoval = true, fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "discipline", fetch = FetchType.LAZY)
     private Set<TeacherDisciplineMapping> teachers = new HashSet<>();
 
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
-    public Long getDisId() {
-        return disId;
-    }
-
-    public void setDisId(Long disId) {
-        this.disId = disId;
-    }
-
-    public String getDisName() {
-        return disName;
-    }
-
-    public void setDisName(String disName) {
-        this.disName = disName;
-    }
-
-    public String getDisNum() {
-        return disNum;
-    }
-
-    public void setDisNum(String disNum) {
-        this.disNum = disNum;
-    }
-
-    public Set<StudentDisciplineMapping> getStudents() {
-        return students;
-    }
-
-    public void setStudents(Set<StudentDisciplineMapping> students) {
-        this.students = students;
-    }
-
-    public Set<TeacherDisciplineMapping> getTeachers() {
-        return teachers;
-    }
-
-    public void setTeachers(Set<TeacherDisciplineMapping> teachers) {
-        this.teachers = teachers;
-    }
-
-    @Override
-    public String toString() {
-        return "Discipline{" +
-                "disId=" + disId +
-                ", disName='" + disName + '\'' +
-                ", disNum='" + disNum + '\'' +
-                ", students=" + students +
-                ", teachers=" + teachers +
-                '}';
-    }
 }

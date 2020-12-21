@@ -6,8 +6,7 @@ import com.nhsoft.ledemo.model.Teacher;
 import java.util.List;
 
 /**
- * @author heChangSheng
- * @date 2020/12/16 : 19:04
+ * @author hcsheng1998
  */
 public interface TeacherService {
 
@@ -15,7 +14,7 @@ public interface TeacherService {
 
     List<Long> batchDelete(List<Long> teaIdList);
 
-    Teacher readById(Long teaId);
+    Teacher read(Long teaId);
 
     /**
      * 查询所有老师并分页

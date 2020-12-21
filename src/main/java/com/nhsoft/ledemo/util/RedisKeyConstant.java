@@ -1,8 +1,7 @@
 package com.nhsoft.ledemo.util;
 
 /**
- * @author heChangSheng
- * @date 2020/12/16 : 19:46
+ * @author hcsheng1998
  */
 public class RedisKeyConstant {
 

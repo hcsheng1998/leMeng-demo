@@ -3,17 +3,19 @@ package com.nhsoft.ledemo.dao.impl;
 import com.nhsoft.ledemo.dao.BaseDao;
 import com.nhsoft.ledemo.dao.TeacherDisciplineMappingDao;
 import com.nhsoft.ledemo.dto.DisciplineGradeDTO;
+import com.nhsoft.ledemo.model.Discipline;
+import com.nhsoft.ledemo.model.StudentDisciplineMapping;
 import com.nhsoft.ledemo.model.TeacherDisciplineMapping;
 import com.nhsoft.ledemo.model.uid.TeacherDisciplineMpUid;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.util.Collection;
 import java.util.List;
 
 /**
- * @author heChangSheng
- * @date 2020/12/15 : 15:57
+ * @author hcsheng1998
  */
 @Repository
 public class TeacherDisciplineMappingDaoImpl extends BaseDao implements TeacherDisciplineMappingDao {
@@ -22,24 +24,25 @@ public class TeacherDisciplineMappingDaoImpl extends BaseDao implements TeacherD
     public List<DisciplineGradeDTO> listDisciplineGrade(TeacherDisciplineMpUid teacherDisciplineMpUid) {
 
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<DisciplineGradeDTO> query = criteriaBuilder.createQuery(DisciplineGradeDTO.class);
+        CriteriaQuery<DisciplineGradeDTO> criteriaQuery = criteriaBuilder.createQuery(DisciplineGradeDTO.class);
 
-        Root<TeacherDisciplineMapping> tdmFrom = query.from(TeacherDisciplineMapping.class);
-        Join<Object, Object> dJoin = tdmFrom.join("discipline", JoinType.LEFT);
-        Join<Object, Object> sdmJoin = dJoin.join("students", JoinType.LEFT);
+        Root<TeacherDisciplineMapping> root = criteriaQuery.from(TeacherDisciplineMapping.class);
+        Join<TeacherDisciplineMapping, Discipline> disciplineJoin = root.join("discipline", JoinType.LEFT);
+        Join<Discipline, StudentDisciplineMapping> disciplineStudentDisciplineMappingJoin = disciplineJoin.join("students", JoinType.LEFT);
 
-        query.multiselect(
-                dJoin.get("disName"),
-                criteriaBuilder.avg(sdmJoin.get("grade")),
-                criteriaBuilder.max(sdmJoin.get("grade")),
-                criteriaBuilder.min(sdmJoin.get("grade"))
+        criteriaQuery.multiselect(
+                disciplineJoin.get("disName"),
+                criteriaBuilder.avg(disciplineStudentDisciplineMappingJoin.get("grade")),
+                criteriaBuilder.max(disciplineStudentDisciplineMappingJoin.get("grade")),
+                criteriaBuilder.min(disciplineStudentDisciplineMappingJoin.get("grade"))
         );
+        Path<Object> path = root.get("teacherDisciplineMpUid");
+        Predicate teaIdMpPredicate = criteriaBuilder.equal(path.get("teaIdMp"), teacherDisciplineMpUid.getTeaIdMp());
+        Predicate yearsMpPredicate = criteriaBuilder.equal(path.get("years"), teacherDisciplineMpUid.getYears());
+        criteriaQuery.where(criteriaBuilder.and(teaIdMpPredicate, yearsMpPredicate));
 
-        Predicate teaIdMp = criteriaBuilder.equal(tdmFrom.get("teacherDisciplineMpUid").get("teaIdMp"), teacherDisciplineMpUid.getTeaIdMp());
-        Predicate yearsMp = criteriaBuilder.equal(sdmJoin.get("studentDisciplineMpUid").get("years"), teacherDisciplineMpUid.getYears());
-        query.where(criteriaBuilder.and(teaIdMp, yearsMp));
-
-        return entityManager.createQuery(query).getResultList();
+        TypedQuery<DisciplineGradeDTO> typedQuery = entityManager.createQuery(criteriaQuery);
+        return typedQuery.getResultList();
     }
 
     @Override

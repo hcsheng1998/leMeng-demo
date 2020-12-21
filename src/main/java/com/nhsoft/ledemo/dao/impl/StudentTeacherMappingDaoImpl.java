@@ -8,8 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 
 /**
- * @author heChangSheng
- * @date 2020/12/17 : 14:55
+ * @author hcsheng1998
  */
 @Repository
 public class StudentTeacherMappingDaoImpl extends BaseDao implements StudentTeacherMappingDao {

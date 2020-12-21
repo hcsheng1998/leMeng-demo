@@ -11,8 +11,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import java.util.ArrayList;
 
 /**
- * @author heChangSheng
- * @date 2020/12/10 : 11:12
+ * @author hcsheng1998
  */
 @Configuration
 @EnableSwagger2
@@ -20,9 +19,9 @@ public class SwaggerConfiguration {
 
     @Bean
     public Docket docket() {
-
-        return new Docket(DocumentationType.SWAGGER_2)
-                .apiInfo(getApiInfo()).groupName("hcs");
+        Docket docket = new Docket(DocumentationType.SWAGGER_2);
+        docket.apiInfo(getApiInfo());
+        return docket.groupName("hcs");
     }
 
     public ApiInfo getApiInfo() {

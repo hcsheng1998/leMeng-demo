@@ -7,8 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * @author heChangSheng
- * @date 2020/12/9 : 15:24
+ * @author hcsheng1998
  */
 public interface DisciplineDao {
 
@@ -25,5 +24,5 @@ public interface DisciplineDao {
      */
     List<Discipline> listAll(PagingDTO pagingDTO);
 
-    Discipline readById(Long disId);
+    Discipline read(Long disId);
 }

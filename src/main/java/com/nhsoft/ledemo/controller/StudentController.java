@@ -14,23 +14,20 @@ import com.nhsoft.ledemo.util.ResponseUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * @author heChangSheng
- * @date 2020/12/11 : 0:10
+ * @author hcsheng1998
  */
+@Slf4j
 @Api(tags = "学生信息模块")
 @RestController
 @RequestMapping("/student/")
 public class StudentController {
-
-    private static final Logger log = LoggerFactory.getLogger(com.nhsoft.ledemo.controller.StudentController.class);
 
     @Resource
     private StudentService studentService;
@@ -39,8 +36,8 @@ public class StudentController {
     private StudentDisciplineMappingService studentDisciplineMappingService;
 
     @ApiOperation("学生查询本人每学年各学科成绩接口")
-    @GetMapping("listSubjectGradeByYears")
-    public ResponseMessageDTO listSubjectGradeByYears(@ApiParam("封装参数:years和stuIdMp") StudentDisciplineMpUidDTO studentDisciplineMpUidDTO) {
+    @GetMapping("listSubjectGrade")
+    public ResponseMessageDTO listSubjectGrade(@ApiParam("封装参数:years和stuIdMp") StudentDisciplineMpUidDTO studentDisciplineMpUidDTO) {
 
         log.info("接口的参数:" + studentDisciplineMpUidDTO);
         ResponseMessageDTO responseMessageDTO = null;
@@ -58,8 +55,8 @@ public class StudentController {
     }
 
     @ApiOperation("查询所有的学生,并分页")
-    @PostMapping("listStudent")
-    public ResponseMessageDTO listStudent(@ApiParam("分页信息,page,size") PagingDTO pagingDTO) {
+    @PostMapping("list")
+    public ResponseMessageDTO listAll(@ApiParam("分页信息,page,size") PagingDTO pagingDTO) {
 
         log.info("接口的参数:" + pagingDTO);
         ResponseMessageDTO responseMessageDTO = null;
@@ -77,13 +74,13 @@ public class StudentController {
     }
 
     @ApiOperation("查询一个学生信息")
-    @PostMapping("readStudent")
-    public ResponseMessageDTO readStudent(@ApiParam("学生主键") Long stuId) {
+    @PostMapping("read")
+    public ResponseMessageDTO read(@ApiParam("学生主键") Long stuId) {
 
         log.info("接口的参数:" + stuId);
         ResponseMessageDTO responseMessageDTO = null;
 
-        Student student = studentService.readById(stuId);
+        Student student = studentService.read(stuId);
 
         if (student == null) {
             responseMessageDTO = ResponseUtil.opeFail();
@@ -96,8 +93,8 @@ public class StudentController {
     }
 
     @ApiOperation("批量保存或更新学生信息")
-    @PostMapping("saveOrUpdateStudent")
-    public ResponseMessageDTO saveOrUpdateStudent(@ApiParam("学生集合")  @RequestParam("studentDTOList") List<StudentDTO> studentDTOList) {
+    @PostMapping("saveOrUpdate")
+    public ResponseMessageDTO saveOrUpdate(@ApiParam("学生集合")  @RequestParam("studentDTOList") List<StudentDTO> studentDTOList) {
 
         log.info("接口的参数:" + studentDTOList);
         ResponseMessageDTO responseMessageDTO = null;
@@ -115,8 +112,8 @@ public class StudentController {
     }
 
     @ApiOperation("批量删除学生信息")
-    @PostMapping("deleteStudent")
-    public ResponseMessageDTO deleteStudent(@ApiParam("学生主键集合") @RequestParam("stuIdList") List<Long> stuIdList) {
+    @PostMapping("delete")
+    public ResponseMessageDTO delete(@ApiParam("学生主键集合") @RequestParam("stuIdList") List<Long> stuIdList) {
 
         log.info("接口的参数:" + stuIdList);
         ResponseMessageDTO responseMessageDTO = null;

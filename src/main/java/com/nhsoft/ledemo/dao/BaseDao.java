@@ -4,8 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
- * @author heChangSheng
- * @date 2020/12/17 : 9:30
+ * @author hcsheng1998
  */
 public class BaseDao {
 

@@ -7,14 +7,14 @@ import com.nhsoft.ledemo.model.Teacher;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.Collection;
 import java.util.List;
 
 /**
- * @author heChangSheng
- * @date 2020/12/17 : 14:53
+ * @author hcsheng1998
  */
 @Repository
 public class TeacherDaoImpl extends BaseDao implements TeacherDao {
@@ -34,22 +34,29 @@ public class TeacherDaoImpl extends BaseDao implements TeacherDao {
     @Override
     public Collection<Long> batchDelete(Collection<Long> teaIdCollection) {
 
-        String jpql = "delete from Teacher  where teaId = ?1";
+        String jpql = "delete from Teacher  where teaId = :teaId";
         Query query = entityManager.createQuery(jpql);
-        teaIdCollection.forEach(id -> query.setParameter(1, id).executeUpdate());
+        teaIdCollection.forEach(id -> {
+            query.setParameter("teaId", id);
+            query.executeUpdate();
+        });
         return teaIdCollection;
     }
 
     @Override
     public List<Teacher> listAll(PagingDTO pagingDTO) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Teacher> query = criteriaBuilder.createQuery(Teacher.class);
-        query.from(Teacher.class);
-        return entityManager.createQuery(query).setFirstResult(pagingDTO.getPage()).setMaxResults(pagingDTO.getSize()).getResultList();
+        CriteriaQuery<Teacher> criteriaQuery = criteriaBuilder.createQuery(Teacher.class);
+        criteriaQuery.from(Teacher.class);
+
+        TypedQuery<Teacher> typedQuery = entityManager.createQuery(criteriaQuery);
+        typedQuery.setFirstResult(pagingDTO.getOffset());
+        typedQuery.setMaxResults(pagingDTO.getRows());
+        return typedQuery.getResultList();
     }
 
     @Override
-    public Teacher readById(Long teaId) {
+    public Teacher read(Long teaId) {
         return entityManager.find(Teacher.class, teaId);
     }
 }

@@ -8,8 +8,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * @author heChangSheng
- * @date 2020/12/9 : 15:24
+ * @author hcsheng1998
  */
 public interface TeacherDisciplineMappingDao {
 

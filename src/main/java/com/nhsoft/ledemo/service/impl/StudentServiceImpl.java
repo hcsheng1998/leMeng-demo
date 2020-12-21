@@ -16,8 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @author heChangSheng
- * @date 2020/12/10 : 14:54
+ * @author hcsheng1998
  */
 @Service
 @Transactional
@@ -51,11 +50,11 @@ public class StudentServiceImpl implements StudentService {
 
         studentList = null;
 
-        if (toUpdateStudentList.size() != 0) {
+        if (CollectionUtils.isEmpty(toUpdateStudentList)) {
             studentList = (List<Student>) studentDao.batchSave(toUpdateStudentList);
         }
 
-        if (toSaveStudentList.size() != 0) {
+        if (CollectionUtils.isEmpty(toSaveStudentList)) {
             studentList = (List<Student>) studentDao.batchUpdate(toSaveStudentList);
             //保存成功,学生学号放入redis的set中
             studentList.forEach(student -> set.add(RedisKeyConstant.STUDENT_SET, student.getStuNum()));
@@ -68,13 +67,13 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<Long> batchDelete(List<Long> stuIdList) {
 
-        if (stuIdList == null) {
+        if (CollectionUtils.isEmpty(stuIdList)) {
             return null;
         }
 
         //删除成功,从redis中删除学号
         stuIdList.forEach(stuId -> {
-            Student student = studentDao.readById(stuId);
+            Student student = studentDao.read(stuId);
             set.remove(RedisKeyConstant.STUDENT_SET, student.getStuNum());
         });
 
@@ -84,9 +83,9 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student readById(Long stuId) {
+    public Student read(Long stuId) {
 
-        return studentDao.readById(stuId);
+        return studentDao.read(stuId);
     }
 
     @Override

@@ -7,14 +7,14 @@ import com.nhsoft.ledemo.model.Discipline;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.Collection;
 import java.util.List;
 
 /**
- * @author heChangSheng
- * @date 2020/12/17 : 10:31
+ * @author hcsheng1998
  */
 @Repository
 public class DisciplineDaoImpl extends BaseDao implements DisciplineDao {
@@ -34,23 +34,29 @@ public class DisciplineDaoImpl extends BaseDao implements DisciplineDao {
     @Override
     public Collection<Long> batchDelete(Collection<Long> disIdCollection) {
 
-        String jpql = "delete from Discipline  where disId = ?1";
+        String jpql = "delete from Discipline  where disId = :disId";
         Query query = entityManager.createQuery(jpql);
-        disIdCollection.forEach(id -> query.setParameter(1, id).executeUpdate());
+        disIdCollection.forEach(id -> {
+            query.setParameter("disId", id);
+            query.executeUpdate();
+        });
         return disIdCollection;
     }
 
     @Override
     public List<Discipline> listAll(PagingDTO pagingDTO) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Discipline> query = criteriaBuilder.createQuery(Discipline.class);
+        CriteriaQuery<Discipline> criteriaQuery = criteriaBuilder.createQuery(Discipline.class);
+        criteriaQuery.from(Discipline.class);
 
-        query.from(Discipline.class);
-        return entityManager.createQuery(query).setFirstResult(pagingDTO.getPage()).setMaxResults(pagingDTO.getSize()).getResultList();
+        TypedQuery<Discipline> typedQuery = entityManager.createQuery(criteriaQuery);
+        typedQuery.setFirstResult(pagingDTO.getOffset());
+        typedQuery.setMaxResults(pagingDTO.getRows());
+        return typedQuery.getResultList();
     }
 
     @Override
-    public Discipline readById(Long disId) {
+    public Discipline read(Long disId) {
         return entityManager.find(Discipline.class, disId);
     }
 }

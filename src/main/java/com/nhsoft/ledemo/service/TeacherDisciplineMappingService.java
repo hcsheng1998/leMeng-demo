@@ -6,8 +6,7 @@ import com.nhsoft.ledemo.model.uid.TeacherDisciplineMpUid;
 import java.util.List;
 
 /**
- * @author heChangSheng
- * @date 2020/12/17 : 22:41
+ * @author hcsheng1998
  */
 public interface TeacherDisciplineMappingService {
 

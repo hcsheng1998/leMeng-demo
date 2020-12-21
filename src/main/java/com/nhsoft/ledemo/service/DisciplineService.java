@@ -6,8 +6,7 @@ import com.nhsoft.ledemo.model.Discipline;
 import java.util.List;
 
 /**
- * @author heChangSheng
- * @date 2020/12/16 : 19:03
+ * @author hcsheng1998
  */
 public interface DisciplineService {
 
@@ -15,7 +14,7 @@ public interface DisciplineService {
 
     List<Long> batchDelete(List<Long> disIdList);
 
-    Discipline readById(Long disId);
+    Discipline read(Long disId);
 
     /**
      * 查询所有学科并分页

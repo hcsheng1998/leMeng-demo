@@ -37,7 +37,7 @@ class LedemoApplicationTests {
     @Test
     void test2() {
 
-        Discipline discipline = disciplineService.readById(1L);
+        Discipline discipline = disciplineService.read(1L);
         DisciplineDTO disciplineDTO = CopyUtil.to(discipline, DisciplineDTO.class);
         System.out.println(disciplineDTO);
     }
@@ -45,7 +45,7 @@ class LedemoApplicationTests {
     @Test
     void test3() {
 
-        Discipline discipline = disciplineDao.readById(1L);
+        Discipline discipline = disciplineDao.read(1L);
         System.out.println(discipline);
     }
 

@@ -3,15 +3,16 @@ package com.nhsoft.ledemo.dto;
 import com.nhsoft.ledemo.dto.uid.StudentTeacherMpUidDTO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
 import java.io.Serializable;
 
 
 /**
- * @author heChangSheng
- * @date 2020/12/9 : 20:16
+ * @author hcsheng1998
  */
 @ApiModel("学生老师映射表实体类")
+@Data
 public class StudentTeacherMappingDTO implements Serializable {
 
     private static final long serialVersionUID = 3106506185891692084L;
@@ -25,40 +26,4 @@ public class StudentTeacherMappingDTO implements Serializable {
     @ApiModelProperty("老师类")
     private TeacherDTO teacher;
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
-    public StudentTeacherMpUidDTO getStudentTeacherMpUid() {
-        return studentTeacherMpUid;
-    }
-
-    public void setStudentTeacherMpUid(StudentTeacherMpUidDTO studentTeacherMpUid) {
-        this.studentTeacherMpUid = studentTeacherMpUid;
-    }
-
-    public StudentDTO getStudent() {
-        return student;
-    }
-
-    public void setStudent(StudentDTO student) {
-        this.student = student;
-    }
-
-    public TeacherDTO getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(TeacherDTO teacher) {
-        this.teacher = teacher;
-    }
-
-    @Override
-    public String toString() {
-        return "StudentTeacherMappingDTO{" +
-                "studentTeacherMpUid=" + studentTeacherMpUid +
-                ", student=" + student +
-                ", teacher=" + teacher +
-                '}';
-    }
 }

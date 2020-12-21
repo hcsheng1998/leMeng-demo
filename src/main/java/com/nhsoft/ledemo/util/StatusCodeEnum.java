@@ -2,8 +2,7 @@ package com.nhsoft.ledemo.util;
 
 
 /**
- * @author heChangSheng
- * @date 2020/12/10 : 23:52
+ * @author hcsheng1998
  */
 public enum StatusCodeEnum {
     /**

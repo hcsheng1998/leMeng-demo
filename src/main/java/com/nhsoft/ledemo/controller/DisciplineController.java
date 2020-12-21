@@ -14,23 +14,20 @@ import com.nhsoft.ledemo.util.ResponseUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * @author heChangSheng
- * @date 2020/12/11 : 9:04
+ * @author hcsheng1998
  */
+@Slf4j
 @Api(tags = "学科信息模块")
 @RestController
 @RequestMapping("/discipline/")
 public class DisciplineController {
-
-    private static final Logger log = LoggerFactory.getLogger(com.nhsoft.ledemo.controller.DisciplineController.class);
 
     @Resource
     private DisciplineService disciplineService;
@@ -39,8 +36,8 @@ public class DisciplineController {
     private StudentDisciplineMappingService studentDisciplineMappingService;
 
     @ApiOperation("查询每学年学科平均成绩，最高分，最低分")
-    @GetMapping("readDisciplineGradeByYears")
-    public ResponseMessageDTO readDisciplineGradeByYears(@ApiParam("封装参数:years和disIdMp") StudentDisciplineMpUidDTO studentDisciplineMpUidDTO) {
+    @GetMapping("readDisciplineGrade")
+    public ResponseMessageDTO readDisciplineGrade(@ApiParam("封装参数:years和disIdMp") StudentDisciplineMpUidDTO studentDisciplineMpUidDTO) {
 
         log.info("接口的参数:" + studentDisciplineMpUidDTO);
         ResponseMessageDTO responseMessageDTO = null;
@@ -58,8 +55,8 @@ public class DisciplineController {
     }
 
     @ApiOperation("查询所有的学科,并分页")
-    @PostMapping("listDiscipline")
-    public ResponseMessageDTO listDiscipline(@ApiParam("分页信息,page,size") PagingDTO pagingDTO) {
+    @PostMapping("list")
+    public ResponseMessageDTO listAll(@ApiParam("分页信息,page,size") PagingDTO pagingDTO) {
 
         log.info("接口的参数:" + pagingDTO);
         ResponseMessageDTO responseMessageDTO = null;
@@ -77,13 +74,13 @@ public class DisciplineController {
     }
 
     @ApiOperation("查询一个学科信息")
-    @PostMapping("readDiscipline")
-    public ResponseMessageDTO readDiscipline(@ApiParam("学科主键") Long disId) {
+    @PostMapping("read")
+    public ResponseMessageDTO read(@ApiParam("学科主键") Long disId) {
 
         log.info("接口的参数:" + disId);
         ResponseMessageDTO responseMessageDTO = null;
 
-        Discipline discipline = disciplineService.readById(disId);
+        Discipline discipline = disciplineService.read(disId);
 
         if (discipline == null) {
             responseMessageDTO = ResponseUtil.opeFail();
@@ -96,8 +93,8 @@ public class DisciplineController {
     }
 
     @ApiOperation("批量保存或更新学科信息")
-    @PostMapping("saveOrUpdateDiscipline")
-    public ResponseMessageDTO saveOrUpdateDiscipline(@ApiParam("学科集合") @RequestParam("disciplineDTOList") List<DisciplineDTO> disciplineDTOList) {
+    @PostMapping("saveOrUpdate")
+    public ResponseMessageDTO saveOrUpdate(@ApiParam("学科集合") @RequestParam("disciplineDTOList") List<DisciplineDTO> disciplineDTOList) {
 
         log.info("接口的参数:" + disciplineDTOList);
         ResponseMessageDTO responseMessageDTO = null;
@@ -115,8 +112,8 @@ public class DisciplineController {
     }
 
     @ApiOperation("批量删除学科信息")
-    @PostMapping("deleteDiscipline")
-    public ResponseMessageDTO deleteDiscipline(@ApiParam("学科主键集合") @RequestParam("disIdList") List<Long> disIdList) {
+    @PostMapping("delete")
+    public ResponseMessageDTO delete(@ApiParam("学科主键集合") @RequestParam("disIdList") List<Long> disIdList) {
 
         log.info("接口的参数:" + disIdList);
         ResponseMessageDTO responseMessageDTO = null;

@@ -3,8 +3,7 @@ package com.nhsoft.ledemo.util;
 import com.nhsoft.ledemo.dto.ResponseMessageDTO;
 
 /**
- * @author heChangSheng
- * @date 2020/12/11 : 9:20
+ * @author hcsheng1998
  */
 public class ResponseUtil {
 

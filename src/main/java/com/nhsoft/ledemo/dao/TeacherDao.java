@@ -7,8 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * @author heChangSheng
- * @date 2020/12/9 : 15:24
+ * @author hcsheng1998
  */
 public interface TeacherDao {
     
@@ -25,6 +24,6 @@ public interface TeacherDao {
      */
     List<Teacher> listAll(PagingDTO pagingDTO);
 
-    Teacher readById(Long teaId);
+    Teacher read(Long teaId);
     
 }

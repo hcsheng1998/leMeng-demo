@@ -16,8 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @author heChangSheng
- * @date 2020/12/10 : 15:24
+ * @author hcsheng1998
  */
 @Service
 @Transactional
@@ -50,14 +49,14 @@ public class DisciplineServiceImpl implements DisciplineService {
 
         disciplineList = null;
 
-        if (toSaveDisciplineList.size() != 0) {
+        if (CollectionUtils.isEmpty(toSaveDisciplineList)) {
             disciplineList = (List<Discipline>) disciplineDao.batchSave(toSaveDisciplineList);
 
             //保存成功,学科编号放入redis的set中
             disciplineList.forEach(discipline -> set.add(RedisKeyConstant.DISCIPLINE_SET, discipline.getDisNum()));
         }
 
-        if (toUpdateDisciplineList.size() != 0) {
+        if (CollectionUtils.isEmpty(toUpdateDisciplineList)) {
             disciplineList = (List<Discipline>) disciplineDao.batchUpdate(toUpdateDisciplineList);
         }
 
@@ -68,13 +67,13 @@ public class DisciplineServiceImpl implements DisciplineService {
     @Override
     public List<Long> batchDelete(List<Long> disIdList) {
 
-        if (disIdList == null) {
+        if (CollectionUtils.isEmpty(disIdList)) {
             return null;
         }
 
         //删除成功,从redis中删除学科编号
         disIdList.forEach(disId -> {
-            Discipline discipline = disciplineDao.readById(disId);
+            Discipline discipline = disciplineDao.read(disId);
             set.remove(RedisKeyConstant.DISCIPLINE_SET, discipline.getDisNum());
         });
 
@@ -84,13 +83,13 @@ public class DisciplineServiceImpl implements DisciplineService {
     }
 
     @Override
-    public Discipline readById(Long disId) {
+    public Discipline read(Long disId) {
 
         if (disId == null) {
             return null;
         }
 
-        return disciplineDao.readById(disId);
+        return disciplineDao.read(disId);
     }
 
     @Override

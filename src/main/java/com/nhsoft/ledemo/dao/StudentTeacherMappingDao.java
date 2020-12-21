@@ -5,8 +5,7 @@ import com.nhsoft.ledemo.model.StudentTeacherMapping;
 import java.util.Collection;
 
 /**
- * @author heChangSheng
- * @date 2020/12/9 : 15:24
+ * @author hcsheng1998
  */
 public interface StudentTeacherMappingDao {
 

@@ -14,23 +14,20 @@ import com.nhsoft.ledemo.util.ResponseUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * @author heChangSheng
- * @date 2020/12/11 : 9:04
+ * @author hcsheng1998
  */
+@Slf4j
 @Api(tags = "教师信息模块")
 @RestController
 @RequestMapping("/teacher/")
 public class TeacherController {
-
-    private static final Logger log = LoggerFactory.getLogger(com.nhsoft.ledemo.controller.TeacherController.class);
 
     @Resource
     private TeacherService teacherService;
@@ -39,8 +36,8 @@ public class TeacherController {
     private TeacherDisciplineMappingService teacherDisciplineMappingService;
 
     @ApiOperation("查询教师本人每学年，学科平均成绩，最高分，最低分")
-    @GetMapping("listTeacherGradeByYears")
-    public ResponseMessageDTO listTeacherGradeByYears(@ApiParam("封装参数:years和teaIdMp") TeacherDisciplineMpUidDTO teacherDisciplineMpUidDTO) {
+    @GetMapping("listTeacherGrade")
+    public ResponseMessageDTO listTeacherGrade(@ApiParam("封装参数:years和teaIdMp") TeacherDisciplineMpUidDTO teacherDisciplineMpUidDTO) {
 
         log.info("接口的参数:" + teacherDisciplineMpUidDTO);
         ResponseMessageDTO responseMessageDTO = null;
@@ -58,8 +55,8 @@ public class TeacherController {
     }
 
     @ApiOperation("查询所有的教师,并分页")
-    @PostMapping("listTeacher")
-    public ResponseMessageDTO listTeacher(@ApiParam("分页信息,page,size") PagingDTO pagingDTO) {
+    @PostMapping("list")
+    public ResponseMessageDTO listAll(@ApiParam("分页信息,page,size") PagingDTO pagingDTO) {
 
         log.info("接口的参数:" + pagingDTO);
         ResponseMessageDTO responseMessageDTO = null;
@@ -78,13 +75,13 @@ public class TeacherController {
     }
 
     @ApiOperation("查询一个教师信息")
-    @PostMapping("readTeacher")
-    public ResponseMessageDTO readTeacher(@ApiParam("教师主键") Long teaId) {
+    @PostMapping("read")
+    public ResponseMessageDTO read(@ApiParam("教师主键") Long teaId) {
 
         log.info("接口的参数:" + teaId);
         ResponseMessageDTO responseMessageDTO = null;
 
-        Teacher teacher = teacherService.readById(teaId);
+        Teacher teacher = teacherService.read(teaId);
 
         if (teacher == null) {
             responseMessageDTO = ResponseUtil.opeFail();
@@ -97,8 +94,8 @@ public class TeacherController {
     }
 
     @ApiOperation("批量保存或更新教师信息")
-    @PostMapping("saveOrUpdateTeacher")
-    public ResponseMessageDTO saveOrUpdateTeacher(@ApiParam("教师信息集合") @RequestParam("teacherDTOList") List<TeacherDTO> teacherDTOList) {
+    @PostMapping("saveOrUpdate")
+    public ResponseMessageDTO saveOrUpdate(@ApiParam("教师信息集合") @RequestParam("teacherDTOList") List<TeacherDTO> teacherDTOList) {
 
         log.info("接口的参数:" + teacherDTOList);
         ResponseMessageDTO responseMessageDTO = null;
@@ -116,8 +113,8 @@ public class TeacherController {
     }
 
     @ApiOperation("批量删除教师信息")
-    @PostMapping("deleteTeacher")
-    public ResponseMessageDTO deleteTeacher(@ApiParam("教师主键") @RequestParam("teaIdList") List<Long> teaIdList) {
+    @PostMapping("delete")
+    public ResponseMessageDTO delete(@ApiParam("教师主键") @RequestParam("teaIdList") List<Long> teaIdList) {
 
         log.info("接口的参数:" + teaIdList);
         ResponseMessageDTO responseMessageDTO = null;

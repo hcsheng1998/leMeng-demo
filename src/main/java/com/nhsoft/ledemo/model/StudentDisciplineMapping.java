@@ -1,6 +1,7 @@
 package com.nhsoft.ledemo.model;
 
 import com.nhsoft.ledemo.model.uid.StudentDisciplineMpUid;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -8,11 +9,11 @@ import java.math.BigDecimal;
 
 
 /**
- * @author heChangSheng
- * @date 2020/12/9 : 20:16
  * 学生学科映射表实体类
+ * @author hcsheng1998
  */
 @Entity
+@Data
 public class StudentDisciplineMapping implements Serializable {
 
     private static final long serialVersionUID = -4639557825595705571L;
@@ -32,14 +33,14 @@ public class StudentDisciplineMapping implements Serializable {
     /**
      * 学生表多对一
      */
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pk_stu_id_mp", referencedColumnName = "pk_stu_id", insertable = false, updatable = false)
     private Student student;
 
     /**
      * 老师表多对一
      */
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pk_dis_id_mp", referencedColumnName = "pk_dis_id", insertable = false, updatable = false)
     private Discipline discipline;
 
@@ -48,56 +49,4 @@ public class StudentDisciplineMapping implements Serializable {
      */
     private BigDecimal grade;
 
-    public StudentDisciplineMapping() {
-    }
-
-    public StudentDisciplineMapping(StudentDisciplineMpUid studentDisciplineMpUid) {
-        this.studentDisciplineMpUid = studentDisciplineMpUid;
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
-    public StudentDisciplineMpUid getStudentDisciplineMpUid() {
-        return studentDisciplineMpUid;
-    }
-
-    public void setStudentDisciplineMpUid(StudentDisciplineMpUid studentDisciplineMpUid) {
-        this.studentDisciplineMpUid = studentDisciplineMpUid;
-    }
-
-    public Student getStudent() {
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
-    }
-
-    public Discipline getDiscipline() {
-        return discipline;
-    }
-
-    public void setDiscipline(Discipline discipline) {
-        this.discipline = discipline;
-    }
-
-    public BigDecimal getGrade() {
-        return grade;
-    }
-
-    public void setGrade(BigDecimal grade) {
-        this.grade = grade;
-    }
-
-    @Override
-    public String toString() {
-        return "StudentDisciplineMapping{" +
-                "studentDisciplineMpUid=" + studentDisciplineMpUid +
-                ", student=" + student +
-                ", discipline=" + discipline +
-                ", grade=" + grade +
-                '}';
-    }
 }

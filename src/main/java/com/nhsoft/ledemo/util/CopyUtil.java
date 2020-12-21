@@ -13,6 +13,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * @author hcsheng1998
+ */
 public class CopyUtil {
 
     private static final Logger LOG = LoggerFactory.getLogger(com.nhsoft.ledemo.util.CopyUtil.class);

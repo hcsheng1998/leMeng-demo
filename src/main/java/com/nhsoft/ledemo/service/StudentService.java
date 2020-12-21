@@ -6,8 +6,7 @@ import com.nhsoft.ledemo.model.Student;
 import java.util.List;
 
 /**
- * @author heChangSheng
- * @date 2020/12/16 : 19:04
+ * @author hcsheng1998
  */
 public interface StudentService {
 
@@ -15,7 +14,7 @@ public interface StudentService {
 
     List<Long> batchDelete(List<Long> stuIdList);
 
-    Student readById(Long stuId);
+    Student read(Long stuId);
 
     /**
      * 查询所有学生并分页

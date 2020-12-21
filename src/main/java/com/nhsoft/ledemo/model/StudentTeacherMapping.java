@@ -1,17 +1,18 @@
 package com.nhsoft.ledemo.model;
 
 import com.nhsoft.ledemo.model.uid.StudentTeacherMpUid;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 
 /**
- * @author heChangSheng
- * @date 2020/12/9 : 20:16
  * 学生老师映射表实体类
+ * @author hcsheng1998
  */
 @Entity
+@Data
 public class StudentTeacherMapping implements Serializable {
 
     private static final long serialVersionUID = 2500538766050196747L;
@@ -31,51 +32,15 @@ public class StudentTeacherMapping implements Serializable {
     /**
      * 学生表多对一
      */
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pk_stu_id_mp", referencedColumnName = "pk_stu_id", insertable=false, updatable=false)
     private Student student;
 
     /**
      * 老师表多对一
      */
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pk_tea_id_mp", referencedColumnName = "pk_tea_id", insertable=false, updatable=false)
     private Teacher teacher;
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
-    public StudentTeacherMpUid getStudentTeacherMpUid() {
-        return studentTeacherMpUid;
-    }
-
-    public void setStudentTeacherMpUid(StudentTeacherMpUid studentTeacherMpUid) {
-        this.studentTeacherMpUid = studentTeacherMpUid;
-    }
-
-    public Student getStudent() {
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
-    }
-
-    public Teacher getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
-    }
-
-    @Override
-    public String toString() {
-        return "StudentTeacherMapping{" +
-                "studentTeacherMpUid=" + studentTeacherMpUid +
-                ", student=" + student +
-                ", teacher=" + teacher +
-                '}';
-    }
 }

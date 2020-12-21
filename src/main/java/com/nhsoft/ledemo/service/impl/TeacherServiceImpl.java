@@ -16,8 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @author heChangSheng
- * @date 2020/12/10 : 14:54
+ * @author hcsheng1998
  */
 @Service
 @Transactional
@@ -50,14 +49,14 @@ public class TeacherServiceImpl implements TeacherService {
 
         teacherList = null;
 
-        if (toSaveTeacherList.size() != 0) {
+        if (CollectionUtils.isEmpty(toSaveTeacherList)) {
             teacherList = (List<Teacher>) teacherDao.batchSave(toSaveTeacherList);
 
             //保存成功,老师编号放入redis的set中
             teacherList.forEach(teacher -> set.add(RedisKeyConstant.TEACHER_SET, teacher.getTeaNum()));
         }
 
-        if (toUpdateTeacherList.size() != 0) {
+        if (CollectionUtils.isEmpty(toUpdateTeacherList)) {
             teacherList = (List<Teacher>) teacherDao.batchUpdate(toUpdateTeacherList);
         }
 
@@ -68,13 +67,13 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public List<Long> batchDelete(List<Long> teaIdList) {
 
-        if (teaIdList == null) {
+        if (CollectionUtils.isEmpty(teaIdList)) {
             return null;
         }
 
         //删除成功,从redis中删除老师编号
         teaIdList.forEach(teaId -> {
-            Teacher teacher = teacherDao.readById(teaId);
+            Teacher teacher = teacherDao.read(teaId);
             set.remove(RedisKeyConstant.TEACHER_SET, teacher.getTeaNum());
         });
 
@@ -84,13 +83,13 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public Teacher readById(Long teaId) {
+    public Teacher read(Long teaId) {
 
         if (teaId == null) {
             return null;
         }
 
-        return teacherDao.readById(teaId);
+        return teacherDao.read(teaId);
     }
 
     @Override
