@@ -31,6 +31,7 @@ public class RedisConfiguration {
 
         StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
 
+
         // key采用String的序列化方式
         redisTemplate.setKeySerializer(stringRedisSerializer);
         // value序列化方式采用jackson
